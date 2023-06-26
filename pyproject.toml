@@ -45,7 +45,7 @@ modules = ["ai2_kit"]
 [tool.portray.mkdocs]
 plugins = ["mkdocs-jupyter", "search"]
 
-nav = [{ Home = "README.md" }]
+nav = [{ Home = "README.md" }, { Manual = "doc/manual" }]
 
 [build-system]
 requires = ["poetry-core"]
