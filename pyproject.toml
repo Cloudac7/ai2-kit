@@ -35,6 +35,18 @@ secondary = false
 autopep8 = "^2.0.0"
 pytest = "^7.2.0"
 
+[tool.poetry.group.doc.dependencies]
+portray = "^1.8.0"
+mkdocs-jupyter = "^0.22.0"
+
+[tool.portray]
+modules = ["ai2_kit"]
+
+[tool.portray.mkdocs]
+plugins = ["mkdocs-jupyter", "search"]
+
+nav = [{ Home = "README.md" }]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
