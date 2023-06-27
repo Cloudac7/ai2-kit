@@ -1,0 +1,2290 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.5.4">
+    
+    
+      
+        <title>Util - ai2-kit</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.80dcb947.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="lightgreen">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-ai2_kitcoreutil" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="ai2-kit" class="md-header__button md-logo" aria-label="ai2-kit" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ai2-kit
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Util
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Cloudac7/ai2-kit" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ai2-kit
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="ai2-kit" class="md-nav__button md-logo" aria-label="ai2-kit" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    ai2-kit
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Cloudac7/ai2-kit" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ai2-kit
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../doc/manual" class="md-nav__link">
+        Manual
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          Ai2 Kit
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ai2 Kit" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          Ai2 Kit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dflow/" class="md-nav__link">
+        Dflow
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../main/" class="md-nav__link">
+        Main
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_4" type="checkbox" id="__nav_3_1_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_4">
+          Algorithm
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Algorithm" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_4">
+          <span class="md-nav__icon md-icon"></span>
+          Algorithm
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithm/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithm/proton_transfer/" class="md-nav__link">
+        Proton Transfer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_5" type="checkbox" id="__nav_3_1_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_5">
+          Core
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Core" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          Core
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../artifact/" class="md-nav__link">
+        Artifact
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checkpoint/" class="md-nav__link">
+        Checkpoint
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cmd/" class="md-nav__link">
+        Cmd
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../connector/" class="md-nav__link">
+        Connector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../executor/" class="md-nav__link">
+        Executor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../future/" class="md-nav__link">
+        Future
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../log/" class="md-nav__link">
+        Log
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../queue_system/" class="md-nav__link">
+        Queue System
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resource_manager/" class="md-nav__link">
+        Resource Manager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../script/" class="md-nav__link">
+        Script
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Util
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Util
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default_mutable_field" class="md-nav__link">
+    default_mutable_field
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dict_nested_get" class="md-nav__link">
+    dict_nested_get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dict_nested_set" class="md-nav__link">
+    dict_nested_set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flatten" class="md-nav__link">
+    flatten
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format_env_string" class="md-nav__link">
+    format_env_string
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load_yaml_file" class="md-nav__link">
+    load_yaml_file
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load_yaml_files" class="md-nav__link">
+    load_yaml_files
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#merge_dict" class="md-nav__link">
+    merge_dict
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse_cp2k_input" class="md-nav__link">
+    parse_cp2k_input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s_uuid" class="md-nav__link">
+    s_uuid
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#short_hash" class="md-nav__link">
+    short_hash
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sort_unique_str_list" class="md-nav__link">
+    sort_unique_str_list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#split_list" class="md-nav__link">
+    split_list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to_awaitable" class="md-nav__link">
+    to_awaitable
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    Classes
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jointag" class="md-nav__link">
+    JoinTag
+  </a>
+  
+    <nav class="md-nav" aria-label="JoinTag">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-variables" class="md-nav__link">
+    Class variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-methods" class="md-nav__link">
+    Static methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from_yaml" class="md-nav__link">
+    from_yaml
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#register" class="md-nav__link">
+    register
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to_yaml" class="md-nav__link">
+    to_yaml
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readtag" class="md-nav__link">
+    ReadTag
+  </a>
+  
+    <nav class="md-nav" aria-label="ReadTag">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-variables_1" class="md-nav__link">
+    Class variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-methods_1" class="md-nav__link">
+    Static methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from_yaml_1" class="md-nav__link">
+    from_yaml
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#register_1" class="md-nav__link">
+    register
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to_yaml_1" class="md-nav__link">
+    to_yaml
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_6" type="checkbox" id="__nav_3_1_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_6">
+          Domain
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Domain" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_6">
+          <span class="md-nav__icon md-icon"></span>
+          Domain
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/cll/" class="md-nav__link">
+        Cll
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/constant/" class="md-nav__link">
+        Constant
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/cp2k/" class="md-nav__link">
+        Cp2K
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/data_helper/" class="md-nav__link">
+        Data Helper
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/deepmd/" class="md-nav__link">
+        Deepmd
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/lammps/" class="md-nav__link">
+        Lammps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/selector/" class="md-nav__link">
+        Selector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/updater/" class="md-nav__link">
+        Updater
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_7" type="checkbox" id="__nav_3_1_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_7">
+          Tool
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tool" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_7">
+          <span class="md-nav__icon md-icon"></span>
+          Tool
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tool/ase/" class="md-nav__link">
+        Ase
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tool/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_8" type="checkbox" id="__nav_3_1_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_8">
+          Workflow
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Workflow" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_8">
+          <span class="md-nav__icon md-icon"></span>
+          Workflow
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workflow/cll_mlp/" class="md-nav__link">
+        Cll Mlp
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workflow/fep_mlp/" class="md-nav__link">
+        Fep Mlp
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workflow/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default_mutable_field" class="md-nav__link">
+    default_mutable_field
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dict_nested_get" class="md-nav__link">
+    dict_nested_get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dict_nested_set" class="md-nav__link">
+    dict_nested_set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flatten" class="md-nav__link">
+    flatten
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format_env_string" class="md-nav__link">
+    format_env_string
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load_yaml_file" class="md-nav__link">
+    load_yaml_file
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load_yaml_files" class="md-nav__link">
+    load_yaml_files
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#merge_dict" class="md-nav__link">
+    merge_dict
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse_cp2k_input" class="md-nav__link">
+    parse_cp2k_input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s_uuid" class="md-nav__link">
+    s_uuid
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#short_hash" class="md-nav__link">
+    short_hash
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sort_unique_str_list" class="md-nav__link">
+    sort_unique_str_list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#split_list" class="md-nav__link">
+    split_list
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to_awaitable" class="md-nav__link">
+    to_awaitable
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    Classes
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jointag" class="md-nav__link">
+    JoinTag
+  </a>
+  
+    <nav class="md-nav" aria-label="JoinTag">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-variables" class="md-nav__link">
+    Class variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-methods" class="md-nav__link">
+    Static methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from_yaml" class="md-nav__link">
+    from_yaml
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#register" class="md-nav__link">
+    register
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to_yaml" class="md-nav__link">
+    to_yaml
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readtag" class="md-nav__link">
+    ReadTag
+  </a>
+  
+    <nav class="md-nav" aria-label="ReadTag">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-variables_1" class="md-nav__link">
+    Class variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-methods_1" class="md-nav__link">
+    Static methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from_yaml_1" class="md-nav__link">
+    from_yaml
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#register_1" class="md-nav__link">
+    register
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to_yaml_1" class="md-nav__link">
+    to_yaml
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/Cloudac7/ai2-kit/edit/main/reference/ai2_kit/core/util.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="module-ai2_kitcoreutil">Module ai2_kit.core.util</h1>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="s s-Atom">from</span> <span class="s s-Atom">ruamel</span><span class="p">.</span><span class="s s-Atom">yaml</span> <span class="s s-Atom">import</span> <span class="nv">YAML</span>
+
+<span class="s s-Atom">from</span> <span class="s s-Atom">pathlib</span> <span class="s s-Atom">import</span> <span class="nv">Path</span>
+
+<span class="s s-Atom">from</span> <span class="s s-Atom">typing</span> <span class="s s-Atom">import</span> <span class="nv">Tuple</span><span class="p">,</span> <span class="nv">List</span><span class="p">,</span> <span class="nv">TypeVar</span>
+
+<span class="s s-Atom">from</span> <span class="s s-Atom">dataclasses</span> <span class="s s-Atom">import</span> <span class="s s-Atom">field</span>
+
+<span class="s s-Atom">from</span> <span class="s s-Atom">cp2k_input_tools</span><span class="p">.</span><span class="s s-Atom">parser</span> <span class="s s-Atom">import</span> <span class="nv">CP2KInputParserSimplified</span>
+
+<span class="s s-Atom">import</span> <span class="s s-Atom">shortuuid</span>
+
+<span class="s s-Atom">import</span> <span class="s s-Atom">hashlib</span>
+
+<span class="s s-Atom">import</span> <span class="s s-Atom">base64</span>
+
+<span class="s s-Atom">import</span> <span class="s s-Atom">copy</span>
+
+<span class="s s-Atom">import</span> <span class="s s-Atom">os</span>
+
+<span class="s s-Atom">import</span> <span class="s s-Atom">io</span>
+
+<span class="s s-Atom">from</span> <span class="p">.</span><span class="s s-Atom">log</span> <span class="s s-Atom">import</span> <span class="s s-Atom">get_logger</span>
+
+<span class="s s-Atom">logger</span> <span class="o">=</span> <span class="nf">get_logger</span><span class="p">(</span><span class="k">__</span><span class="s s-Atom">name__</span><span class="p">)</span>
+
+<span class="nv">EMPTY</span> <span class="o">=</span> <span class="nf">object</span><span class="p">()</span>
+
+<span class="s s-Atom">def</span> <span class="nf">default_mutable_field</span><span class="p">(</span><span class="s s-Atom">obj</span><span class="p">)</span><span class="o">:</span>
+
+    <span class="s s-Atom">return</span> <span class="nf">field</span><span class="p">(</span><span class="s s-Atom">default_factory</span><span class="o">=</span><span class="s s-Atom">lambda</span><span class="p">:</span> <span class="s s-Atom">copy</span><span class="p">.</span><span class="nf">copy</span><span class="p">(</span><span class="s s-Atom">obj</span><span class="p">))</span>
+
+<span class="s s-Atom">def</span> <span class="k">__</span><span class="nf">merge_dict</span><span class="p">()</span><span class="o">:</span>
+
+    <span class="s2">&quot;&quot;&quot;cloudpickle compatible: https://stackoverflow.com/questions/75292769&quot;&quot;&quot;</span>
+
+    <span class="s s-Atom">def</span> <span class="nf">merge_dict</span><span class="p">(</span><span class="s s-Atom">lo</span><span class="p">:</span> <span class="s s-Atom">dict</span><span class="p">,</span> <span class="s s-Atom">ro</span><span class="p">:</span> <span class="s s-Atom">dict</span><span class="p">,</span> <span class="s s-Atom">path</span><span class="o">=</span><span class="nv">None</span><span class="p">)</span><span class="o">:</span>
+
+        <span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">        merge two dict, the left dict will be overridden</span>
+
+<span class="s2">        this method won&#39;t merge list</span>
+
+<span class="s2">        &quot;&quot;&quot;</span>
+
+        <span class="s s-Atom">if</span> <span class="s s-Atom">path</span> <span class="o">is</span> <span class="nv">None</span><span class="o">:</span>
+
+            <span class="s s-Atom">path</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="s s-Atom">for</span> <span class="s s-Atom">key</span><span class="p">,</span> <span class="nb">val</span><span class="s s-Atom">ue</span> <span class="s s-Atom">in</span> <span class="s s-Atom">ro</span><span class="p">.</span><span class="nf">items</span><span class="p">()</span><span class="o">:</span>
+
+            <span class="s s-Atom">if</span> <span class="s s-Atom">key</span> <span class="s s-Atom">in</span> <span class="s s-Atom">lo</span><span class="p">:</span>
+
+                <span class="s s-Atom">current_path</span> <span class="o">=</span> <span class="s s-Atom">path</span> <span class="o">+</span> <span class="p">[</span> <span class="nf">str</span><span class="p">(</span><span class="s s-Atom">key</span><span class="p">)</span> <span class="p">]</span>
+
+                <span class="s s-Atom">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="s s-Atom">lo</span><span class="p">[</span><span class="s s-Atom">key</span><span class="p">],</span> <span class="s s-Atom">dict</span><span class="p">)</span> <span class="s s-Atom">and</span> <span class="nf">isinstance</span><span class="p">(</span><span class="nb">val</span><span class="s s-Atom">ue</span><span class="p">,</span> <span class="s s-Atom">dict</span><span class="p">)</span><span class="o">:</span>
+
+                    <span class="nf">merge_dict</span><span class="p">(</span><span class="s s-Atom">lo</span><span class="p">[</span><span class="s s-Atom">key</span><span class="p">],</span> <span class="nb">val</span><span class="s s-Atom">ue</span><span class="p">,</span> <span class="s s-Atom">current_path</span><span class="p">)</span>
+
+                <span class="s s-Atom">else</span><span class="p">:</span>
+
+                    <span class="nf">print</span><span class="p">(</span><span class="s s-Atom">&#39;.&#39;</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="s s-Atom">current_path</span><span class="p">)</span> <span class="o">+</span> <span class="s s-Atom">&#39; has been overridden&#39;</span><span class="p">)</span>
+
+                    <span class="s s-Atom">lo</span><span class="p">[</span><span class="s s-Atom">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">val</span><span class="s s-Atom">ue</span>
+
+            <span class="s s-Atom">else</span><span class="p">:</span>
+
+                <span class="s s-Atom">lo</span><span class="p">[</span><span class="s s-Atom">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">val</span><span class="s s-Atom">ue</span>
+
+        <span class="s s-Atom">return</span> <span class="s s-Atom">lo</span>
+
+    <span class="s s-Atom">return</span> <span class="s s-Atom">merge_dict</span>
+
+<span class="s s-Atom">merge_dict</span> <span class="o">=</span> <span class="k">__</span><span class="nf">merge_dict</span><span class="p">()</span>
+
+<span class="s s-Atom">#</span> <span class="nv">TODO</span><span class="o">:</span> <span class="s s-Atom">support</span> <span class="nf">http</span><span class="p">(</span><span class="s s-Atom">s</span><span class="p">)</span> <span class="s s-Atom">url</span>
+
+<span class="s s-Atom">def</span> <span class="nf">load_yaml_file</span><span class="p">(</span><span class="s s-Atom">path</span><span class="p">:</span> <span class="nv">Path</span><span class="p">)</span><span class="o">:</span>
+
+    <span class="s s-Atom">yaml</span> <span class="o">=</span> <span class="nv">YAML</span><span class="p">(</span><span class="s s-Atom">typ=&#39;safe&#39;</span><span class="p">)</span>
+
+    <span class="nv">JoinTag</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="s s-Atom">yaml</span><span class="p">)</span>
+
+    <span class="nv">ReadTag</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="s s-Atom">yaml</span><span class="p">)</span>
+
+    <span class="s s-Atom">return</span> <span class="s s-Atom">yaml</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="s s-Atom">path</span><span class="p">)</span>
+
+<span class="s s-Atom">def</span> <span class="nf">load_yaml_files</span><span class="p">(</span><span class="o">*</span><span class="s s-Atom">paths</span><span class="p">:</span> <span class="nv">Tuple</span><span class="p">[</span><span class="nv">Path</span><span class="p">])</span><span class="o">:</span>
+
+    <span class="s s-Atom">d</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="s s-Atom">for</span> <span class="s s-Atom">path</span> <span class="s s-Atom">in</span> <span class="s s-Atom">paths</span><span class="p">:</span>
+
+        <span class="nf">print</span><span class="p">(</span><span class="s s-Atom">&#39;load yaml file: &#39;</span><span class="p">,</span> <span class="s s-Atom">path</span><span class="p">)</span>
+
+        <span class="s s-Atom">d</span> <span class="o">=</span> <span class="nf">merge_dict</span><span class="p">(</span><span class="s s-Atom">d</span><span class="p">,</span> <span class="nf">load_yaml_file</span><span class="p">(</span><span class="nv">Path</span><span class="p">(</span><span class="s s-Atom">path</span><span class="p">)))</span>  <span class="s s-Atom">#</span> <span class="s s-Atom">type</span><span class="p">:</span> <span class="s s-Atom">ignore</span>
+
+    <span class="s s-Atom">return</span> <span class="s s-Atom">d</span>
+
+<span class="s s-Atom">def</span> <span class="nf">s_uuid</span><span class="p">()</span><span class="o">:</span>
+
+    <span class="s2">&quot;&quot;&quot;short uuid&quot;&quot;&quot;</span>
+
+    <span class="s s-Atom">return</span> <span class="s s-Atom">shortuuid</span><span class="p">.</span><span class="nf">uuid</span><span class="p">()</span>
+
+<span class="s s-Atom">#</span> <span class="nv">TODO</span><span class="o">:</span> <span class="s s-Atom">this</span> <span class="s s-Atom">should</span> <span class="s s-Atom">be</span> <span class="s s-Atom">moved</span> <span class="s s-Atom">out</span> <span class="s s-Atom">from</span> <span class="s s-Atom">core</span> <span class="s s-Atom">module</span>
+
+<span class="s s-Atom">def</span> <span class="nf">parse_cp2k_input</span><span class="p">(</span><span class="s s-Atom">text</span><span class="p">:</span> <span class="s s-Atom">str</span><span class="p">)</span><span class="o">:</span>
+
+    <span class="s s-Atom">parser</span> <span class="o">=</span> <span class="nv">CP2KInputParserSimplified</span><span class="p">(</span><span class="s s-Atom">key_trafo</span><span class="o">=</span><span class="s s-Atom">str</span><span class="p">.</span><span class="s s-Atom">upper</span><span class="p">)</span>
+
+    <span class="s s-Atom">return</span> <span class="s s-Atom">parser</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="s s-Atom">io</span><span class="p">.</span><span class="nv">StringIO</span><span class="p">(</span><span class="s s-Atom">text</span><span class="p">))</span>
+
+<span class="s s-Atom">def</span> <span class="nf">dict_nested_get</span><span class="p">(</span><span class="s s-Atom">d</span><span class="p">:</span> <span class="s s-Atom">dict</span><span class="p">,</span> <span class="s s-Atom">keys</span><span class="p">:</span> <span class="nv">List</span><span class="p">[</span><span class="s s-Atom">str</span><span class="p">],</span> <span class="s s-Atom">default</span><span class="o">=</span><span class="nv">EMPTY</span><span class="p">)</span><span class="o">:</span>
+
+    <span class="s2">&quot;&quot;&quot;get value from nested dict&quot;&quot;&quot;</span>
+
+    <span class="s s-Atom">for</span> <span class="s s-Atom">key</span> <span class="s s-Atom">in</span> <span class="s s-Atom">keys</span><span class="p">:</span>
+
+        <span class="s s-Atom">if</span> <span class="s s-Atom">key</span> <span class="o">not</span> <span class="s s-Atom">in</span> <span class="s s-Atom">d</span> <span class="s s-Atom">and</span> <span class="s s-Atom">default</span> <span class="o">is</span> <span class="o">not</span> <span class="nv">EMPTY</span><span class="o">:</span>
+
+            <span class="s s-Atom">return</span> <span class="s s-Atom">default</span>
+
+        <span class="s s-Atom">d</span> <span class="o">=</span> <span class="s s-Atom">d</span><span class="p">[</span><span class="s s-Atom">key</span><span class="p">]</span>
+
+    <span class="s s-Atom">return</span> <span class="s s-Atom">d</span>
+
+<span class="s s-Atom">def</span> <span class="nf">dict_nested_set</span><span class="p">(</span><span class="s s-Atom">d</span><span class="p">:</span> <span class="s s-Atom">dict</span><span class="p">,</span> <span class="s s-Atom">keys</span><span class="p">:</span> <span class="nv">List</span><span class="p">[</span><span class="s s-Atom">str</span><span class="p">],</span> <span class="nb">val</span><span class="s s-Atom">ue</span><span class="p">)</span><span class="o">:</span>
+
+    <span class="s2">&quot;&quot;&quot;set value to nested dict&quot;&quot;&quot;</span>
+
+    <span class="s s-Atom">for</span> <span class="s s-Atom">key</span> <span class="s s-Atom">in</span> <span class="s s-Atom">keys</span><span class="p">[</span><span class="o">:-</span><span class="mi">1</span><span class="p">]</span><span class="o">:</span>
+
+        <span class="s s-Atom">d</span> <span class="o">=</span> <span class="s s-Atom">d</span><span class="p">[</span><span class="s s-Atom">key</span><span class="p">]</span>
+
+    <span class="s s-Atom">d</span><span class="p">[</span><span class="s s-Atom">keys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">val</span><span class="s s-Atom">ue</span>
+
+<span class="s s-Atom">def</span> <span class="nf">sort_unique_str_list</span><span class="p">(</span><span class="s s-Atom">l</span><span class="p">:</span> <span class="nv">List</span><span class="p">[</span><span class="s s-Atom">str</span><span class="p">])</span> <span class="s s-Atom">-&gt;</span> <span class="nv">List</span><span class="p">[</span><span class="s s-Atom">str</span><span class="p">]</span><span class="o">:</span>
+
+    <span class="s2">&quot;&quot;&quot;remove duplicate str and sort&quot;&quot;&quot;</span>
+
+    <span class="s s-Atom">return</span> <span class="nf">list</span><span class="p">(</span><span class="nf">sorted</span><span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="s s-Atom">l</span><span class="p">)))</span>
+
+<span class="nv">T</span> <span class="o">=</span> <span class="nv">TypeVar</span><span class="p">(</span><span class="s s-Atom">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="s s-Atom">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="s s-Atom">l</span><span class="p">:</span> <span class="nv">List</span><span class="p">[</span><span class="nv">List</span><span class="p">[</span><span class="nv">T</span><span class="p">]])</span> <span class="s s-Atom">-&gt;</span> <span class="nv">List</span><span class="p">[</span><span class="nv">T</span><span class="p">]</span><span class="o">:</span>
+
+    <span class="s s-Atom">return</span> <span class="p">[</span><span class="s s-Atom">item</span> <span class="s s-Atom">for</span> <span class="s s-Atom">sublist</span> <span class="s s-Atom">in</span> <span class="s s-Atom">l</span> <span class="s s-Atom">for</span> <span class="s s-Atom">item</span> <span class="s s-Atom">in</span> <span class="s s-Atom">sublist</span><span class="p">]</span>
+
+<span class="s s-Atom">def</span> <span class="nf">format_env_string</span><span class="p">(</span><span class="s s-Atom">s</span><span class="p">:</span> <span class="s s-Atom">str</span><span class="p">)</span> <span class="s s-Atom">-&gt;</span> <span class="s s-Atom">str</span><span class="p">:</span>
+
+    <span class="s s-Atom">return</span> <span class="s s-Atom">s</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="s s-Atom">**os</span><span class="p">.</span><span class="s s-Atom">environ</span><span class="p">)</span>
+
+<span class="s s-Atom">def</span> <span class="nf">split_list</span><span class="p">(</span><span class="s s-Atom">l</span><span class="p">:</span> <span class="nv">List</span><span class="p">[</span><span class="nv">T</span><span class="p">],</span> <span class="s s-Atom">n</span><span class="p">:</span> <span class="s s-Atom">int</span><span class="p">)</span> <span class="s s-Atom">-&gt;</span> <span class="nv">List</span><span class="p">[</span><span class="nv">List</span><span class="p">[</span><span class="nv">T</span><span class="p">]]</span><span class="o">:</span>
+
+    <span class="s2">&quot;&quot;&quot;split list into n chunks&quot;&quot;&quot;</span>
+
+    <span class="s s-Atom">#</span> <span class="s s-Atom">ref</span><span class="p">:</span> <span class="s s-Atom">https</span><span class="p">:</span><span class="o">//</span><span class="s s-Atom">stackoverflow</span><span class="p">.</span><span class="s s-Atom">com</span><span class="o">/</span><span class="s s-Atom">questions</span><span class="o">/</span><span class="mi">2130016</span><span class="o">/</span><span class="s s-Atom">splitting</span><span class="o">-</span><span class="s s-Atom">a</span><span class="o">-</span><span class="s s-Atom">list</span><span class="o">-</span><span class="s s-Atom">into</span><span class="o">-</span><span class="s s-Atom">n</span><span class="o">-</span><span class="s s-Atom">parts</span><span class="o">-</span><span class="s s-Atom">of</span><span class="o">-</span><span class="s s-Atom">approximately</span><span class="o">-</span><span class="s s-Atom">equal</span><span class="o">-</span><span class="s s-Atom">length</span>
+
+    <span class="s s-Atom">k</span><span class="p">,</span> <span class="s s-Atom">m</span> <span class="o">=</span> <span class="nf">divmod</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="s s-Atom">l</span><span class="p">),</span> <span class="s s-Atom">n</span><span class="p">)</span>
+
+    <span class="s s-Atom">return</span> <span class="p">[</span><span class="s s-Atom">l</span><span class="p">[</span><span class="s s-Atom">i</span><span class="o">*</span><span class="s s-Atom">k</span><span class="o">+</span><span class="nf">min</span><span class="p">(</span><span class="s s-Atom">i</span><span class="p">,</span> <span class="s s-Atom">m</span><span class="p">)</span> <span class="o">:</span> <span class="p">(</span><span class="s s-Atom">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="s s-Atom">k</span><span class="o">+</span><span class="nf">min</span><span class="p">(</span><span class="s s-Atom">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s s-Atom">m</span><span class="p">)]</span> <span class="s s-Atom">for</span> <span class="s s-Atom">i</span> <span class="s s-Atom">in</span> <span class="nf">range</span><span class="p">(</span><span class="s s-Atom">n</span><span class="p">)]</span>
+
+<span class="s s-Atom">def</span> <span class="nf">short_hash</span><span class="p">(</span><span class="s s-Atom">s</span><span class="p">:</span> <span class="s s-Atom">str</span><span class="p">)</span> <span class="s s-Atom">-&gt;</span> <span class="s s-Atom">str</span><span class="p">:</span>
+
+    <span class="s2">&quot;&quot;&quot;short hash string&quot;&quot;&quot;</span>
+
+    <span class="s s-Atom">digest</span> <span class="o">=</span> <span class="s s-Atom">hashlib</span><span class="p">.</span><span class="nf">sha1</span><span class="p">(</span><span class="s s-Atom">s</span><span class="p">.</span><span class="nf">encode</span><span class="p">(</span><span class="s s-Atom">&#39;utf-8&#39;</span><span class="p">)).</span><span class="nf">digest</span><span class="p">()</span>
+
+    <span class="s s-Atom">#</span> <span class="s s-Atom">use</span> <span class="s s-Atom">urlsafe</span> <span class="s s-Atom">encode</span> <span class="s s-Atom">to</span> <span class="s s-Atom">avoid</span> <span class="s s-Atom">&#39;/&#39;</span> <span class="s s-Atom">in</span> <span class="s s-Atom">the</span> <span class="s s-Atom">string</span><span class="p">,</span> <span class="s s-Atom">as</span> <span class="s s-Atom">it</span> <span class="s s-Atom">will</span> <span class="s s-Atom">cause</span> <span class="s s-Atom">problem</span> <span class="s s-Atom">in</span> <span class="s s-Atom">file</span> <span class="s s-Atom">path</span>
+
+    <span class="s s-Atom">return</span> <span class="s s-Atom">base64</span><span class="p">.</span><span class="nf">urlsafe_b64encode</span><span class="p">(</span><span class="s s-Atom">digest</span><span class="p">).</span><span class="nf">decode</span><span class="p">(</span><span class="s s-Atom">&#39;utf-8&#39;</span><span class="p">)[</span><span class="o">:-</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="s s-Atom">async</span> <span class="s s-Atom">def</span> <span class="nf">to_awaitable</span><span class="p">(</span><span class="nb">val</span><span class="s s-Atom">ue</span><span class="p">:</span> <span class="nv">T</span><span class="p">)</span> <span class="s s-Atom">-&gt;</span> <span class="nv">T</span><span class="o">:</span>
+
+    <span class="s s-Atom">return</span> <span class="nb">val</span><span class="s s-Atom">ue</span>
+
+<span class="s s-Atom">class</span> <span class="nv">JoinTag</span><span class="o">:</span>
+
+    <span class="s2">&quot;&quot;&quot;a tag to join strings in a list&quot;&quot;&quot;</span>
+
+    <span class="s s-Atom">yaml_tag</span> <span class="o">=</span> <span class="s s-Atom">u&#39;!join&#39;</span>
+
+    <span class="s s-Atom">@classmethod</span>
+
+    <span class="s s-Atom">def</span> <span class="nf">from_yaml</span><span class="p">(</span><span class="s s-Atom">cls</span><span class="p">,</span> <span class="s s-Atom">constructor</span><span class="p">,</span> <span class="s s-Atom">node</span><span class="p">)</span><span class="o">:</span>
+
+        <span class="s s-Atom">seq</span> <span class="o">=</span> <span class="s s-Atom">constructor</span><span class="p">.</span><span class="nf">construct_sequence</span><span class="p">(</span><span class="s s-Atom">node</span><span class="p">)</span>
+
+        <span class="s s-Atom">return</span> <span class="s s-Atom">&#39;&#39;</span><span class="p">.</span><span class="nf">join</span><span class="p">([</span><span class="nf">str</span><span class="p">(</span><span class="s s-Atom">i</span><span class="p">)</span> <span class="s s-Atom">for</span> <span class="s s-Atom">i</span> <span class="s s-Atom">in</span> <span class="s s-Atom">seq</span><span class="p">])</span>
+
+    <span class="s s-Atom">@classmethod</span>
+
+    <span class="s s-Atom">def</span> <span class="nf">to_yaml</span><span class="p">(</span><span class="s s-Atom">cls</span><span class="p">,</span> <span class="s s-Atom">dumper</span><span class="p">,</span> <span class="s s-Atom">data</span><span class="p">)</span><span class="o">:</span>
+
+        <span class="s s-Atom">#</span> <span class="s s-Atom">do</span> <span class="s s-Atom">nothing</span>
+
+        <span class="s s-Atom">return</span> <span class="s s-Atom">dumper</span><span class="p">.</span><span class="nf">represent_sequence</span><span class="p">(</span><span class="s s-Atom">cls</span><span class="p">.</span><span class="s s-Atom">yaml_tag</span><span class="p">,</span> <span class="s s-Atom">data</span><span class="p">)</span>
+
+    <span class="s s-Atom">@classmethod</span>
+
+    <span class="s s-Atom">def</span> <span class="nf">register</span><span class="p">(</span><span class="s s-Atom">cls</span><span class="p">,</span> <span class="s s-Atom">yaml</span><span class="p">:</span> <span class="nv">YAML</span><span class="p">)</span><span class="o">:</span>
+
+        <span class="s s-Atom">yaml</span><span class="p">.</span><span class="nf">register_class</span><span class="p">(</span><span class="s s-Atom">cls</span><span class="p">)</span>
+
+<span class="s s-Atom">class</span> <span class="nv">ReadTag</span><span class="o">:</span>
+
+    <span class="s2">&quot;&quot;&quot;a tag to read string from file&quot;&quot;&quot;</span>
+
+    <span class="s s-Atom">yaml_tag</span> <span class="o">=</span> <span class="s s-Atom">u&#39;!read&#39;</span>
+
+    <span class="s s-Atom">@classmethod</span>
+
+    <span class="s s-Atom">def</span> <span class="nf">from_yaml</span><span class="p">(</span><span class="s s-Atom">cls</span><span class="p">,</span> <span class="s s-Atom">constructor</span><span class="p">,</span> <span class="s s-Atom">node</span><span class="p">)</span><span class="o">:</span>
+
+        <span class="s s-Atom">seq</span> <span class="o">=</span> <span class="s s-Atom">constructor</span><span class="p">.</span><span class="nf">construct_sequence</span><span class="p">(</span><span class="s s-Atom">node</span><span class="p">)</span>
+
+        <span class="s s-Atom">path</span> <span class="o">=</span> <span class="s s-Atom">os</span><span class="p">.</span><span class="s s-Atom">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="o">*</span><span class="s s-Atom">seq</span><span class="p">)</span>
+
+        <span class="s s-Atom">with</span> <span class="nf">open</span><span class="p">(</span><span class="s s-Atom">path</span><span class="p">,</span> <span class="s s-Atom">&#39;r&#39;</span><span class="p">)</span> <span class="s s-Atom">as</span> <span class="s s-Atom">f</span><span class="p">:</span>
+
+            <span class="s s-Atom">return</span> <span class="s s-Atom">f</span><span class="p">.</span><span class="nf">read</span><span class="p">()</span>
+
+    <span class="s s-Atom">@classmethod</span>
+
+    <span class="s s-Atom">def</span> <span class="nf">to_yaml</span><span class="p">(</span><span class="s s-Atom">cls</span><span class="p">,</span> <span class="s s-Atom">dumper</span><span class="p">,</span> <span class="s s-Atom">data</span><span class="p">)</span><span class="o">:</span>
+
+        <span class="s s-Atom">#</span> <span class="s s-Atom">do</span> <span class="s s-Atom">nothing</span>
+
+        <span class="s s-Atom">return</span> <span class="s s-Atom">dumper</span><span class="p">.</span><span class="nf">represent_sequence</span><span class="p">(</span><span class="s s-Atom">cls</span><span class="p">.</span><span class="s s-Atom">yaml_tag</span><span class="p">,</span> <span class="s s-Atom">data</span><span class="p">)</span>
+
+    <span class="s s-Atom">@classmethod</span>
+
+    <span class="s s-Atom">def</span> <span class="nf">register</span><span class="p">(</span><span class="s s-Atom">cls</span><span class="p">,</span> <span class="s s-Atom">yaml</span><span class="p">:</span> <span class="nv">YAML</span><span class="p">)</span><span class="o">:</span>
+
+        <span class="s s-Atom">yaml</span><span class="p">.</span><span class="nf">register_class</span><span class="p">(</span><span class="s s-Atom">cls</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+<h2 id="variables">Variables</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">EMPTY</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">T</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">logger</span>
+</code></pre></div>
+
+<h2 id="functions">Functions</h2>
+<h3 id="default_mutable_field">default_mutable_field</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">default_mutable_field</span><span class="p">(</span>
+    <span class="n">obj</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="nv">def</span><span class="w"> </span><span class="nv">default_mutable_field</span><span class="ss">(</span><span class="nv">obj</span><span class="ss">)</span>:
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nv">field</span><span class="ss">(</span><span class="nv">default_factory</span><span class="o">=</span><span class="nv">lambda</span>:<span class="w"> </span><span class="nv">copy</span>.<span class="nv">copy</span><span class="ss">(</span><span class="nv">obj</span><span class="ss">))</span>
+</code></pre></div>
+
+</details>
+<h3 id="dict_nested_get">dict_nested_get</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">dict_nested_get</span><span class="p">(</span>
+    <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">keys</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">default</span><span class="o">=&lt;</span><span class="nb">object</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7f2cd95184d0</span><span class="o">&gt;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>get value from nested dict</p>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">dict_nested_get</span><span class="p">(</span><span class="nl">d</span><span class="p">:</span><span class="w"> </span><span class="n">dict</span><span class="p">,</span><span class="w"> </span><span class="nl">keys</span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="k">default</span><span class="o">=</span><span class="n">EMPTY</span><span class="p">)</span><span class="err">:</span>
+
+<span class="w">    </span><span class="ss">&quot;&quot;&quot;get value from nested dict&quot;&quot;&quot;</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">keys</span><span class="p">:</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nl">EMPTY</span><span class="p">:</span>
+
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">default</span>
+
+<span class="w">        </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="o">[</span><span class="n">key</span><span class="o">]</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">d</span>
+</code></pre></div>
+
+</details>
+<h3 id="dict_nested_set">dict_nested_set</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">dict_nested_set</span><span class="p">(</span>
+    <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">keys</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">value</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>set value to nested dict</p>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="s s-Atom">def</span> <span class="nf">dict_nested_set</span><span class="p">(</span><span class="s s-Atom">d</span><span class="p">:</span> <span class="s s-Atom">dict</span><span class="p">,</span> <span class="s s-Atom">keys</span><span class="p">:</span> <span class="nv">List</span><span class="p">[</span><span class="s s-Atom">str</span><span class="p">],</span> <span class="nb">val</span><span class="s s-Atom">ue</span><span class="p">)</span><span class="o">:</span>
+
+    <span class="s2">&quot;&quot;&quot;set value to nested dict&quot;&quot;&quot;</span>
+
+    <span class="s s-Atom">for</span> <span class="s s-Atom">key</span> <span class="s s-Atom">in</span> <span class="s s-Atom">keys</span><span class="p">[</span><span class="o">:-</span><span class="mi">1</span><span class="p">]</span><span class="o">:</span>
+
+        <span class="s s-Atom">d</span> <span class="o">=</span> <span class="s s-Atom">d</span><span class="p">[</span><span class="s s-Atom">key</span><span class="p">]</span>
+
+    <span class="s s-Atom">d</span><span class="p">[</span><span class="s s-Atom">keys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">val</span><span class="s s-Atom">ue</span>
+</code></pre></div>
+
+</details>
+<h3 id="flatten">flatten</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span>
+    <span class="n">l</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">flatten</span><span class="p">(</span><span class="nl">l</span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">[</span><span class="n">List[T</span><span class="o">]</span><span class="err">]</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">List</span><span class="o">[</span><span class="n">T</span><span class="o">]</span><span class="err">:</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">[</span><span class="n">item for sublist in l for item in sublist</span><span class="o">]</span>
+</code></pre></div>
+
+</details>
+<h3 id="format_env_string">format_env_string</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">format_env_string</span><span class="p">(</span>
+    <span class="n">s</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">format_env_string</span><span class="p">(</span><span class="n">s</span><span class="o">:</span><span class="w"> </span><span class="n">str</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">str</span><span class="o">:</span>
+
+<span class="w">    </span><span class="kr">return</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+<h3 id="load_yaml_file">load_yaml_file</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">load_yaml_file</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">load_yaml_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span><span class="w"> </span><span class="n">Path</span><span class="p">):</span>
+
+<span class="w">    </span><span class="n">yaml</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">YAML</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;safe&#39;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">JoinTag</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">ReadTag</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+<h3 id="load_yaml_files">load_yaml_files</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">load_yaml_files</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">paths</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">]</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">load_yaml_files</span><span class="p">(</span><span class="o">*</span><span class="nl">paths</span><span class="p">:</span><span class="w"> </span><span class="n">Tuple</span><span class="o">[</span><span class="n">Path</span><span class="o">]</span><span class="p">)</span><span class="err">:</span>
+
+<span class="w">    </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{}</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="k">path</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">paths</span><span class="p">:</span>
+
+<span class="w">        </span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;load yaml file: &#39;</span><span class="p">,</span><span class="w"> </span><span class="k">path</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">merge_dict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">load_yaml_file</span><span class="p">(</span><span class="k">Path</span><span class="p">(</span><span class="k">path</span><span class="p">)))</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">type</span><span class="p">:</span><span class="w"> </span><span class="k">ignore</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">d</span>
+</code></pre></div>
+
+</details>
+<h3 id="merge_dict">merge_dict</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">merge_dict</span><span class="p">(</span>
+    <span class="n">lo</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">ro</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">path</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>merge two dict, the left dict will be overridden</p>
+<p>this method won't merge list</p>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">merge_dict</span><span class="p">(</span><span class="nl">lo</span><span class="p">:</span><span class="w"> </span><span class="n">dict</span><span class="p">,</span><span class="w"> </span><span class="nl">ro</span><span class="p">:</span><span class="w"> </span><span class="n">dict</span><span class="p">,</span><span class="w"> </span><span class="k">path</span><span class="o">=</span><span class="k">None</span><span class="p">)</span><span class="err">:</span>
+
+<span class="w">        </span><span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">        merge two dict, the left dict will be overridden</span>
+
+<span class="ss">        this method won&#39;t merge list</span>
+
+<span class="ss">        &quot;&quot;&quot;</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="k">path</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span>
+
+<span class="w">            </span><span class="k">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span>
+
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">ro</span><span class="p">.</span><span class="n">items</span><span class="p">()</span><span class="err">:</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">lo</span><span class="p">:</span>
+
+<span class="w">                </span><span class="k">current_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">path</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">[</span><span class="n"> str(key) </span><span class="o">]</span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="n">isinstance</span><span class="p">(</span><span class="n">lo</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">dict</span><span class="p">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">isinstance</span><span class="p">(</span><span class="k">value</span><span class="p">,</span><span class="w"> </span><span class="n">dict</span><span class="p">)</span><span class="err">:</span>
+
+<span class="w">                    </span><span class="n">merge_dict</span><span class="p">(</span><span class="n">lo</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">,</span><span class="w"> </span><span class="k">current_path</span><span class="p">)</span>
+
+<span class="w">                </span><span class="k">else</span><span class="err">:</span>
+
+<span class="w">                    </span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">.</span><span class="k">join</span><span class="p">(</span><span class="k">current_path</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39; has been overridden&#39;</span><span class="p">)</span>
+
+<span class="w">                    </span><span class="n">lo</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span>
+
+<span class="w">            </span><span class="k">else</span><span class="err">:</span>
+
+<span class="w">                </span><span class="n">lo</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">lo</span>
+</code></pre></div>
+
+</details>
+<h3 id="parse_cp2k_input">parse_cp2k_input</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">parse_cp2k_input</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="nx">def</span><span class="w"> </span><span class="nx">parse_cp2k_input</span><span class="p">(</span><span class="nx">text</span><span class="p">:</span><span class="w"> </span><span class="nx">str</span><span class="p">):</span>
+
+<span class="w">    </span><span class="nx">parser</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">CP2KInputParserSimplified</span><span class="p">(</span><span class="nx">key_trafo</span><span class="p">=</span><span class="nx">str</span><span class="p">.</span><span class="nx">upper</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">io</span><span class="p">.</span><span class="nx">StringIO</span><span class="p">(</span><span class="nx">text</span><span class="p">))</span>
+</code></pre></div>
+
+</details>
+<h3 id="s_uuid">s_uuid</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">s_uuid</span><span class="p">(</span>
+
+<span class="p">)</span>
+</code></pre></div>
+
+<p>short uuid</p>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="nv">def</span><span class="w"> </span><span class="nv">s_uuid</span><span class="ss">()</span>:
+
+<span class="w">    </span><span class="s2">&quot;&quot;&quot;short uuid&quot;&quot;&quot;</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nv">shortuuid</span>.<span class="nv">uuid</span><span class="ss">()</span>
+</code></pre></div>
+
+</details>
+<h3 id="short_hash">short_hash</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">short_hash</span><span class="p">(</span>
+    <span class="n">s</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+
+<p>short hash string</p>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="s s-Atom">def</span> <span class="nf">short_hash</span><span class="p">(</span><span class="s s-Atom">s</span><span class="p">:</span> <span class="s s-Atom">str</span><span class="p">)</span> <span class="s s-Atom">-&gt;</span> <span class="s s-Atom">str</span><span class="p">:</span>
+
+    <span class="s2">&quot;&quot;&quot;short hash string&quot;&quot;&quot;</span>
+
+    <span class="s s-Atom">digest</span> <span class="o">=</span> <span class="s s-Atom">hashlib</span><span class="p">.</span><span class="nf">sha1</span><span class="p">(</span><span class="s s-Atom">s</span><span class="p">.</span><span class="nf">encode</span><span class="p">(</span><span class="s s-Atom">&#39;utf-8&#39;</span><span class="p">)).</span><span class="nf">digest</span><span class="p">()</span>
+
+    <span class="s s-Atom">#</span> <span class="s s-Atom">use</span> <span class="s s-Atom">urlsafe</span> <span class="s s-Atom">encode</span> <span class="s s-Atom">to</span> <span class="s s-Atom">avoid</span> <span class="s s-Atom">&#39;/&#39;</span> <span class="s s-Atom">in</span> <span class="s s-Atom">the</span> <span class="s s-Atom">string</span><span class="p">,</span> <span class="s s-Atom">as</span> <span class="s s-Atom">it</span> <span class="s s-Atom">will</span> <span class="s s-Atom">cause</span> <span class="s s-Atom">problem</span> <span class="s s-Atom">in</span> <span class="s s-Atom">file</span> <span class="s s-Atom">path</span>
+
+    <span class="s s-Atom">return</span> <span class="s s-Atom">base64</span><span class="p">.</span><span class="nf">urlsafe_b64encode</span><span class="p">(</span><span class="s s-Atom">digest</span><span class="p">).</span><span class="nf">decode</span><span class="p">(</span><span class="s s-Atom">&#39;utf-8&#39;</span><span class="p">)[</span><span class="o">:-</span><span class="mi">2</span><span class="p">]</span>
+</code></pre></div>
+
+</details>
+<h3 id="sort_unique_str_list">sort_unique_str_list</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">sort_unique_str_list</span><span class="p">(</span>
+    <span class="n">l</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+
+<p>remove duplicate str and sort</p>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">sort_unique_str_list</span><span class="p">(</span><span class="nl">l</span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">List</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="err">:</span>
+
+<span class="w">    </span><span class="ss">&quot;&quot;&quot;remove duplicate str and sort&quot;&quot;&quot;</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">list</span><span class="p">(</span><span class="n">sorted</span><span class="p">(</span><span class="k">set</span><span class="p">(</span><span class="n">l</span><span class="p">)))</span>
+</code></pre></div>
+
+</details>
+<h3 id="split_list">split_list</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">split_list</span><span class="p">(</span>
+    <span class="n">l</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">],</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]]</span>
+</code></pre></div>
+
+<p>split list into n chunks</p>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">split_list</span><span class="p">(</span><span class="nl">l</span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">[</span><span class="n">T</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="nl">n</span><span class="p">:</span><span class="w"> </span><span class="nc">int</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">List</span><span class="o">[</span><span class="n">List[T</span><span class="o">]</span><span class="err">]:</span>
+
+<span class="w">    </span><span class="ss">&quot;&quot;&quot;split list into n chunks&quot;&quot;&quot;</span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="k">ref</span><span class="err">:</span><span class="w"> </span><span class="nl">https</span><span class="p">:</span><span class="o">//</span><span class="n">stackoverflow</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">questions</span><span class="o">/</span><span class="mi">2130016</span><span class="o">/</span><span class="n">splitting</span><span class="o">-</span><span class="n">a</span><span class="o">-</span><span class="n">list</span><span class="o">-</span><span class="k">into</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="n">parts</span><span class="o">-</span><span class="k">of</span><span class="o">-</span><span class="n">approximately</span><span class="o">-</span><span class="n">equal</span><span class="o">-</span><span class="n">length</span>
+
+<span class="w">    </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">divmod</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">l</span><span class="p">),</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">[</span><span class="n">l[i*k+min(i, m) : (i+1)*k+min(i+1, m)</span><span class="o">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="err">]</span>
+</code></pre></div>
+
+</details>
+<h3 id="to_awaitable">to_awaitable</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">to_awaitable</span><span class="p">(</span>
+    <span class="n">value</span><span class="p">:</span> <span class="o">~</span><span class="n">T</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="o">~</span><span class="n">T</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="n">async</span><span class="w"> </span><span class="n">def</span><span class="w"> </span><span class="n">to_awaitable</span><span class="p">(</span><span class="n">value</span><span class="o">:</span><span class="w"> </span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">T</span><span class="o">:</span>
+
+<span class="w">    </span><span class="kr">return</span><span class="w"> </span><span class="n">value</span>
+</code></pre></div>
+
+</details>
+<h2 id="classes">Classes</h2>
+<h3 id="jointag">JoinTag</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">JoinTag</span><span class="p">(</span>
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>a tag to join strings in a list</p>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="n">JoinTag</span><span class="p">:</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;a tag to join strings in a list&quot;&quot;&quot;</span>
+
+<span class="w">    </span><span class="n">yaml_tag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">u</span><span class="s1">&#39;!join&#39;</span>
+
+<span class="w">    </span><span class="err">@</span><span class="n">classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">from_yaml</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">constructor</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">):</span>
+
+<span class="w">        </span><span class="n">seq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">constructor</span><span class="o">.</span><span class="n">construct_sequence</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">seq</span><span class="p">])</span>
+
+<span class="w">    </span><span class="err">@</span><span class="n">classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">to_yaml</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">dumper</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">):</span>
+
+<span class="w">        </span><span class="c1"># do nothing</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">dumper</span><span class="o">.</span><span class="n">represent_sequence</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">yaml_tag</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">)</span>
+
+<span class="w">    </span><span class="err">@</span><span class="n">classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">register</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">yaml</span><span class="p">:</span><span class="w"> </span><span class="n">YAML</span><span class="p">):</span>
+
+<span class="w">        </span><span class="n">yaml</span><span class="o">.</span><span class="n">register_class</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+<hr />
+<h4 id="class-variables">Class variables</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">yaml_tag</span>
+</code></pre></div>
+
+<h4 id="static-methods">Static methods</h4>
+<h4 id="from_yaml">from_yaml</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">from_yaml</span><span class="p">(</span>
+    <span class="n">constructor</span><span class="p">,</span>
+    <span class="n">node</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="err">@</span><span class="n">classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">from_yaml</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">constructor</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">):</span>
+
+<span class="w">        </span><span class="n">seq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">constructor</span><span class="o">.</span><span class="n">construct_sequence</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">seq</span><span class="p">])</span>
+</code></pre></div>
+
+</details>
+<h4 id="register">register</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">register</span><span class="p">(</span>
+    <span class="n">yaml</span><span class="p">:</span> <span class="n">ruamel</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">YAML</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="nv">@classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">register</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="nl">yaml</span><span class="p">:</span><span class="w"> </span><span class="n">YAML</span><span class="p">)</span><span class="err">:</span>
+
+<span class="w">        </span><span class="n">yaml</span><span class="p">.</span><span class="n">register_class</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+<h4 id="to_yaml">to_yaml</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">to_yaml</span><span class="p">(</span>
+    <span class="n">dumper</span><span class="p">,</span>
+    <span class="n">data</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="nv">@classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">to_yaml</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">dumper</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="p">)</span><span class="err">:</span>
+
+<span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="n">do</span><span class="w"> </span><span class="n">nothing</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">dumper</span><span class="p">.</span><span class="n">represent_sequence</span><span class="p">(</span><span class="n">cls</span><span class="p">.</span><span class="n">yaml_tag</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+<h3 id="readtag">ReadTag</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ReadTag</span><span class="p">(</span>
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>a tag to read string from file</p>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="n">ReadTag</span><span class="p">:</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;a tag to read string from file&quot;&quot;&quot;</span>
+
+<span class="w">    </span><span class="n">yaml_tag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">u</span><span class="s1">&#39;!read&#39;</span>
+
+<span class="w">    </span><span class="err">@</span><span class="n">classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">from_yaml</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">constructor</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">):</span>
+
+<span class="w">        </span><span class="n">seq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">constructor</span><span class="o">.</span><span class="n">construct_sequence</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="n">seq</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">with</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">f</span><span class="p">:</span>
+
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="w">    </span><span class="err">@</span><span class="n">classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">to_yaml</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">dumper</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">):</span>
+
+<span class="w">        </span><span class="c1"># do nothing</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">dumper</span><span class="o">.</span><span class="n">represent_sequence</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">yaml_tag</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">)</span>
+
+<span class="w">    </span><span class="err">@</span><span class="n">classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">register</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">yaml</span><span class="p">:</span><span class="w"> </span><span class="n">YAML</span><span class="p">):</span>
+
+<span class="w">        </span><span class="n">yaml</span><span class="o">.</span><span class="n">register_class</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+<hr />
+<h4 id="class-variables_1">Class variables</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">yaml_tag</span>
+</code></pre></div>
+
+<h4 id="static-methods_1">Static methods</h4>
+<h4 id="from_yaml_1">from_yaml</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">from_yaml</span><span class="p">(</span>
+    <span class="n">constructor</span><span class="p">,</span>
+    <span class="n">node</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="err">@</span><span class="n">classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">from_yaml</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">constructor</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">):</span>
+
+<span class="w">        </span><span class="n">seq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">constructor</span><span class="o">.</span><span class="n">construct_sequence</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="n">seq</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">with</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">f</span><span class="p">:</span>
+
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</code></pre></div>
+
+</details>
+<h4 id="register_1">register</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">register</span><span class="p">(</span>
+    <span class="n">yaml</span><span class="p">:</span> <span class="n">ruamel</span><span class="o">.</span><span class="n">yaml</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">YAML</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="nv">@classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">register</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="nl">yaml</span><span class="p">:</span><span class="w"> </span><span class="n">YAML</span><span class="p">)</span><span class="err">:</span>
+
+<span class="w">        </span><span class="n">yaml</span><span class="p">.</span><span class="n">register_class</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+<h4 id="to_yaml_1">to_yaml</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">to_yaml</span><span class="p">(</span>
+    <span class="n">dumper</span><span class="p">,</span>
+    <span class="n">data</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="nv">@classmethod</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">to_yaml</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">dumper</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="p">)</span><span class="err">:</span>
+
+<span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="n">do</span><span class="w"> </span><span class="n">nothing</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">dumper</span><span class="p">.</span><span class="n">represent_sequence</span><span class="p">(</span><span class="n">cls</span><span class="p">.</span><span class="n">yaml_tag</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+    
+      <nav class="md-footer__inner md-grid" aria-label="Footer">
+        
+          
+          <a href="../script/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Script" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <div class="md-ellipsis">
+                <span class="md-footer__direction">
+                  Previous
+                </span>
+                Script
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../domain/cll/" class="md-footer__link md-footer__link--next" aria-label="Next: Cll" rel="next">
+            <div class="md-footer__title">
+              <div class="md-ellipsis">
+                <span class="md-footer__direction">
+                  Next
+                </span>
+                Cll
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+            
+            Powered by
+            <a href="http://timothycrosley.github.io/portray">portray.</a>
+            You too can
+            <a href="http://timothycrosley.github.io/portray">
+              portray</a>
+            your Python project well using automatic documentation.
+          </div>
+        
+      </div>
+    </div>
+  </footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.078830c0.min.js"></script>
+      
+    
+  </body>
+</html>
