@@ -1,5 +1,20 @@
 # Change Logs
 
+## v0.3.8
+* feat: ase tool support set_cell and set_pbc commands
+
+## v0.3.7
+* feat: support VASP in cll training workflow
+* feat: support `compress_model` option in deepmd step
+
+## v0.3.6
+* feat: implement read tag for yaml parser
+
+## v0.3.5
+* feat: support plumed config in cll workflow
+* feat: support artifacts attributes inheritance in workflow
+* feat: implement join tag for yaml parser
+
 ## v0.3.4
 * feat: apply checkpoint to all workflows and job submission steps
 * feat: add checkpoint command line interface

@@ -3,12 +3,13 @@ from ai2_kit.core.artifact import ArtifactMap
 from ai2_kit.core.log import get_logger
 from ai2_kit.core.util import load_yaml_files, merge_dict
 from ai2_kit.core.resource_manager import ResourceManager
-from ai2_kit.core.checkpoint import set_checkpoint_file
+from ai2_kit.core.checkpoint import set_checkpoint_file, apply_checkpoint
 from ai2_kit.domain import (
     deepmd,
     lammps,
     selector,
     cp2k,
+    vasp,
     constant as const,
     updater,
     cll,
@@ -35,7 +36,8 @@ class CllWorkflowExecutorConfig(BaseExecutorConfig):
             lammps: lammps.GenericLammpsContextConfig
 
         class Label(BaseModel):
-            cp2k: cp2k.GenericCp2kContextConfig
+            cp2k: Optional[cp2k.GenericCp2kContextConfig]
+            vasp: Optional[vasp.GenericVaspContextConfig]
 
         train: Train
         explore: Explore
@@ -51,7 +53,8 @@ class WorkflowConfig(BaseModel):
         max_iters: int = 10
 
     class Label(BaseModel):
-        cp2k: cp2k.GenericCp2kInputConfig
+        cp2k: Optional[cp2k.GenericCp2kInputConfig]
+        vasp: Optional[vasp.GenericVaspInputConfig]
 
     class Train(BaseModel):
         deepmd: deepmd.GenericDeepmdInputConfig
@@ -96,6 +99,7 @@ def run_workflow(*config_files, executor: Optional[str] = None,
     if path_prefix is None:
         raise ValueError('path_prefix should not be empty')
 
+    cll.init_artifacts(config.artifacts)
     resource_manager = ResourceManager(
         executor_configs=config.executors,
         artifacts=config.artifacts,
@@ -132,6 +136,8 @@ async def cll_mlp_training_workflow(config: CllWorkflowConfig, resource_manager:
 
         # decide path prefix for each iteration
         iter_path_prefix = os.path.join(path_prefix, f'iters-{i:03d}')
+        # prefix of checkpoint
+        cp_prefix = f'iters-{i:03d}'
 
         # label
         if workflow_config.label.cp2k:
@@ -141,12 +147,29 @@ async def cll_mlp_training_workflow(config: CllWorkflowConfig, resource_manager:
                 system_files=[] if selector_output is None else selector_output.get_model_devi_dataset(),
                 initiated=i > 0,
             )
-            cpk2_context = cp2k.GenericCp2kContext(
+            if context_config.label.cp2k is None:
+                raise ValueError('label > cp2k should not be empty')
+            cp2k_context = cp2k.GenericCp2kContext(
                 config=context_config.label.cp2k,
                 path_prefix=os.path.join(iter_path_prefix, 'label-cp2k'),
                 resource_manager=resource_manager,
             )
-            label_output = await cp2k.generic_cp2k(cp2k_input, cpk2_context)
+            label_output = await apply_checkpoint(f'{cp_prefix}/label-cp2k')(cp2k.generic_cp2k)(cp2k_input, cp2k_context)
+        elif workflow_config.label.vasp:
+            vasp_input = vasp.GenericVaspInput(
+                config=workflow_config.label.vasp,
+                type_map=type_map,
+                system_files=[] if selector_output is None else selector_output.get_model_devi_dataset(),
+                initiated=i > 0,
+            )
+            if context_config.label.vasp is None:
+                raise ValueError('label > vasp should not be empty')
+            vasp_context = vasp.GenericVaspContext(
+                config=context_config.label.vasp,
+                path_prefix=os.path.join(iter_path_prefix, 'label-vasp'),
+                resource_manager=resource_manager,
+            )
+            label_output = await apply_checkpoint(f'{cp_prefix}/label-vasp')(vasp.generic_vasp)(vasp_input, vasp_context)
         else:
             raise ValueError('No label method is specified')
 
@@ -164,7 +187,7 @@ async def cll_mlp_training_workflow(config: CllWorkflowConfig, resource_manager:
                 config=context_config.train.deepmd,
                 resource_manager=resource_manager,
             )
-            train_output = await deepmd.generic_deepmd(deepmd_input, deepmd_context)
+            train_output = await apply_checkpoint(f'{cp_prefix}/train-deepmd')(deepmd.generic_deepmd)(deepmd_input, deepmd_context)
         else:
             raise ValueError('No train method is specified')
 
@@ -184,7 +207,7 @@ async def cll_mlp_training_workflow(config: CllWorkflowConfig, resource_manager:
                 config=context_config.explore.lammps,
                 resource_manager=resource_manager,
             )
-            explore_output = await lammps.generic_lammps(lammps_input, lammps_context)
+            explore_output = await apply_checkpoint(f'{cp_prefix}/explore-lammps')(lammps.generic_lammps)(lammps_input, lammps_context)
         else:
             raise ValueError('No explore method is specified')
 
@@ -199,7 +222,7 @@ async def cll_mlp_training_workflow(config: CllWorkflowConfig, resource_manager:
                 path_prefix=os.path.join(iter_path_prefix, 'selector-threshold'),
                 resource_manager=resource_manager,
             )
-            selector_output = await selector.threshold_selector(selector_input, selector_context)
+            selector_output = await apply_checkpoint(f'{cp_prefix}/selector-threshold')(selector.threshold_selector)(selector_input, selector_context)
         else:
             raise ValueError('No select method is specified')
 
