@@ -19,18 +19,23 @@ jobs:
       with:
         python-version: 3.8
 
+    - name: Run image
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: 1.4.2
+    
     - name: Install dependencies
       run: |
-        pip install .[doc]
+        poetry install
     
     - name: Sphinx APIDoc
       run: |
-        sphinx-apidoc -f -o doc/_api/ ai2_kit/ --separate
+        poetry run sphinx-apidoc -f -o doc/_api/ ai2_kit/ --separate
 
     # Build the book
     - name: Build the book
       run: |
-        jupyter-book build doc/
+        poetry run jupyter-book build doc/
 
     # Push the book's HTML to github-pages
     - name: GitHub Pages action
