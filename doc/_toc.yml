@@ -13,7 +13,8 @@ parts:
     chapters:
       - file: manual/ase
       - file: manual/checkpoint
-      - file: manual/faq
+      - file: manual/tips
   - caption: API Reference
+    maxdepth: 1
     chapters:
       - file: _api/modules
