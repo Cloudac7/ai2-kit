@@ -16,4 +16,4 @@ parts:
       - file: manual/faq
   - caption: API Reference
     chapters:
-      - glob: _api/*
+      - file: _api/modules
