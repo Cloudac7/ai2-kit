@@ -1,5 +1,26 @@
 # Change Logs
 
+## v0.3.14
+* feat: label all init data
+
+## v0.3.13
+* feat: support specify deepmd validation data
+
+## v0.3.12
+* fix: model deviation selection rules
+* improvement: cll: stop workflow if no more data is generated
+* refactor module names
+
+## v0.3.11
+* fix: pass down ancestor attributes to child artifacts
+
+## v0.3.10
+* chore: remove cp2k-input-tools
+* feat: implement cpk2 parse module
+
+## v0.3.9
+* fix: raise error on job failure
+
 ## v0.3.8
 * feat: ase tool support set_cell and set_pbc commands
 

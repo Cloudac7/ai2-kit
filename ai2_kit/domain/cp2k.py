@@ -1,7 +1,7 @@
 from ai2_kit.core.artifact import Artifact, ArtifactDict
 from ai2_kit.core.script import BashScript, BashStep, BashTemplate
 from ai2_kit.core.job import gather_jobs
-from ai2_kit.core.util import merge_dict, parse_cp2k_input, dict_nested_get, dict_nested_set, split_list
+from ai2_kit.core.util import merge_dict, dict_nested_get, split_list
 from ai2_kit.core.log import get_logger
 
 from typing import List, Union, Tuple
@@ -10,9 +10,11 @@ from dataclasses import dataclass
 
 import copy
 import os
+import io
 
-from .data_helper import LammpsOutputHelper, XyzHelper, Cp2kOutputHelper, ase_atoms_to_cp2k_input_data
-from .cll import ICllLabelOutput, BaseCllContext
+from .data import LammpsOutputHelper, XyzHelper, Cp2kOutputHelper, ase_atoms_to_cp2k_input_data
+from .iface import ICllLabelOutput, BaseCllContext
+from .util import loads_cp2k_input, load_cp2k_input, dump_cp2k_input
 
 logger = get_logger(__name__)
 
@@ -35,12 +37,13 @@ class GenericCp2kContextConfig(BaseModel):
     cp2k_cmd: str = 'cp2k'
     concurrency: int = 5
 
+
 @dataclass
 class GenericCp2kInput:
     config: GenericCp2kInputConfig
     system_files: List[Artifact]
     type_map: List[str]
-    initiated: bool = False
+    initiated: bool = False  # FIXME: this seems to be a bad design idea
 
 
 @dataclass
@@ -60,6 +63,7 @@ async def generic_cp2k(input: GenericCp2kInput, ctx: GenericCp2kContext) -> Gene
     executor = ctx.resource_manager.default_executor
 
     # For the first round
+    # FIXME: move out from this function, this should be done in the workflow
     if not input.initiated:
         input.system_files += ctx.resource_manager.get_artifacts(input.config.init_system_files)
 
@@ -69,27 +73,9 @@ async def generic_cp2k(input: GenericCp2kInput, ctx: GenericCp2kContext) -> Gene
 
     # prepare input template
     if isinstance(input.config.input_template, str):
-        input_template = parse_cp2k_input(input.config.input_template)
+        input_template = loads_cp2k_input(input.config.input_template)
     else:
         input_template = copy.deepcopy(input.config.input_template)
-
-    fields_with_artifact = [
-        ['FORCE_EVAL', 'DFT', 'BASIS_SET_FILE_NAME'],
-        ['FORCE_EVAL', 'DFT', 'POTENTIAL_FILE_NAME'],
-        ['FORCE_EVAL', 'DFT', 'XC', 'VDW_POTENTIAL', 'PAIR_POTENTIAL', 'PARAMETER', 'PARAMETER_FILE_NAME' ],
-    ]
-    for field_path in fields_with_artifact:
-        try :
-            field_value = dict_nested_get(input_template, field_path)
-            if isinstance(field_value, str) and field_value.startswith('@'):
-                logger.info(f'resolve artifact {field_value}')
-                dict_nested_set(
-                    input_template,
-                    field_path,
-                    ctx.resource_manager.resolve_artifact(field_value[1:])[0].url
-                )
-        except KeyError:
-            pass
 
     # resolve data files
     lammps_dump_files: List[Artifact] = []
@@ -101,7 +87,7 @@ async def generic_cp2k(input: GenericCp2kInput, ctx: GenericCp2kContext) -> Gene
     for system_file in system_files:
         if LammpsOutputHelper.is_match(system_file):
             lammps_out = LammpsOutputHelper(system_file)
-            lammps_dump_files.extend(lammps_out.get_passed_dump_files())
+            lammps_dump_files.extend(lammps_out.get_selected_dumps())
         elif XyzHelper.is_match(system_file):
             xyz_files.append(system_file)
         else:
@@ -116,7 +102,7 @@ async def generic_cp2k(input: GenericCp2kInput, ctx: GenericCp2kContext) -> Gene
             type_map=input.type_map,
             base_dir=tasks_dir,
             input_template=input_template,
-            limit=input.config.limit,
+            limit= 0 if input.initiated else input.config.limit,  # initialize all data if not initiated
         )
     else:
         logger.warn('no available candidates, skip')
@@ -155,7 +141,8 @@ async def generic_cp2k(input: GenericCp2kInput, ctx: GenericCp2kContext) -> Gene
     return GenericCp2kOutput(cp2k_outputs=cp2k_outputs)
 
 
-def __make_cp2k_task_dirs():
+def __export_remote_functions():
+
     def make_cp2k_task_dirs(lammps_dump_files: List[ArtifactDict],
                             xyz_files: List[ArtifactDict],
                             type_map: List[str],
@@ -165,13 +152,9 @@ def __make_cp2k_task_dirs():
                             input_file_name: str = 'input.inp',
                             ) -> List[ArtifactDict]:
         """Generate CP2K input files from LAMMPS dump files or XYZ files."""
-        from cp2k_input_tools import DEFAULT_CP2K_INPUT_XML
-        from cp2k_input_tools.generator import CP2KInputGenerator
-
         import ase.io
         from ase import Atoms
 
-        cp2k_generator = CP2KInputGenerator(DEFAULT_CP2K_INPUT_XML)
         task_dirs = []
         atoms_list: List[Tuple[ArtifactDict, Atoms]] = []
 
@@ -195,29 +178,32 @@ def __make_cp2k_task_dirs():
             task_dir = os.path.join(base_dir, f'{str(i).zfill(6)}')
             os.makedirs(task_dir, exist_ok=True)
 
-            # create input file
-            input_data = copy.deepcopy(input_template)
+            # TODO: should also support input_template
+            # find input template in data_file attrs, if not found, use input_template as default
+            input_data_file = dict_nested_get(file, ['attrs', 'cp2k', 'input_template_file'],  None)  # type: ignore
+            if isinstance(input_data_file, str):
+                with open(input_data_file, 'r') as f:
+                    input_data = load_cp2k_input(f)
+            else:
+                input_data = copy.deepcopy(input_template)
+
             coords, cell = ase_atoms_to_cp2k_input_data(atoms)
             merge_dict(input_data, {
                 'FORCE_EVAL': {
                     'SUBSYS': {
-                        'COORD': {
-                            '*': coords
-                        },
+                        # FIXME: this is a dirty hack, we should make dump_cp2k_input support COORD
+                        'COORD': dict.fromkeys(coords, ''),
                         'CELL': {
-                            'A': cell[0],
-                            'B': cell[1],
-                            'C': cell[2],
+                            'A': ' '.join(map(str, cell[0])),
+                            'B': ' '.join(map(str, cell[1])),
+                            'C': ' '.join(map(str, cell[2])),
                         }
                     }
                 }
             })
-            input_text = '\n'.join(cp2k_generator.line_iter(input_data))
             with open(os.path.join(task_dir, input_file_name), 'w') as f:
-                f.write(input_text)
+                dump_cp2k_input(input_data, f)
 
-            # inherit attrs from input file
-            # TODO: inherit only ancestor key should be enough
             task_dirs.append({
                 'url': task_dir,
                 'attrs': file['attrs'],
@@ -226,4 +212,5 @@ def __make_cp2k_task_dirs():
         return task_dirs
 
     return make_cp2k_task_dirs
-make_cp2k_task_dirs = __make_cp2k_task_dirs()
+
+make_cp2k_task_dirs = __export_remote_functions()

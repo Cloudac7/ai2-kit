@@ -5,7 +5,7 @@ from ase import Atoms
 import os
 import re
 
-from .constant import MODEL_DEVI_OUT, LAMMPS_TRAJ_DIR, LAMMPS_TRAJ_SUFFIX
+from .constant import LAMMPS_TRAJ_DIR, LAMMPS_TRAJ_SUFFIX, LAMMPS_DUMPS_CLASSIFIED
 
 
 class DataHelper:
@@ -35,8 +35,14 @@ class LammpsOutputHelper(DataHelper):
     def get_model_devi_file(self, filename: str) -> Artifact:
         return self.artifact.join(filename)
 
-    def get_passed_dump_files(self) -> List[Artifact]:
-        return [self.artifact.join(LAMMPS_TRAJ_DIR, f'{i}{LAMMPS_TRAJ_SUFFIX}') for i in self.artifact.attrs['passed']]
+    def get_selected_dumps(self) -> List[Artifact]:
+        dumps = []
+        for selected_dump_id in self.artifact.attrs[LAMMPS_DUMPS_CLASSIFIED]['selected']:
+            dump = self.artifact.join(LAMMPS_TRAJ_DIR, f'{selected_dump_id}{LAMMPS_TRAJ_SUFFIX}')
+            dump.attrs = { **self.artifact.attrs, LAMMPS_DUMPS_CLASSIFIED: None}
+            dumps.append(dump)
+        return dumps
+
 
 class PoscarHelper(DataHelper):
     format = 'vasp/poscar'
@@ -60,23 +66,15 @@ class VaspOutputHelper(DataHelper):
     format = 'vasp-output-dir'
 
 
-
-def __ase_atoms_to_cp2k_input_data():
+def __export_remote_functions():
     """workaround for cloudpickle issue"""
+
     def ase_atoms_to_cp2k_input_data(atoms: Atoms) -> Tuple[List[str], List[List[float]]]:
-        """
-        Convert ASE Atoms to CP2K input format
-        """
         coords = [atom.symbol + ' ' + ' '.join(str(x) for x in atom.position) for atom in atoms] # type: ignore
         cell = [list(row) for row in atoms.cell]  # type: ignore
         return (coords, cell)
-    return ase_atoms_to_cp2k_input_data
-ase_atoms_to_cp2k_input_data = __ase_atoms_to_cp2k_input_data()
 
-
-def __convert_to_deepmd_npy():
-    """workaround for cloudpickle issue"""
-    def covert_to_deepmd_npy(cp2k_outputs: List[ArtifactDict], base_dir: str, type_map: List[str]):
+    def convert_to_deepmd_npy(cp2k_outputs: List[ArtifactDict], base_dir: str, type_map: List[str]):
         import dpdata
         from itertools import groupby
 
@@ -92,23 +90,21 @@ def __convert_to_deepmd_npy():
         # group dataset by ancestor key
         for i, (key, atoms_group) in enumerate(groupby(atoms_list, key=lambda x: x[0]['attrs']['ancestor'])):
             output_dir = os.path.join(base_dir, key.replace('/', '_'))
-            atoms_group = list(item[1] for item in atoms_group)
-            if not atoms_group:
-                continue
-            dp_system = dpdata.LabeledSystem(atoms_group[0], fmt='ase/structure')
-            for atoms in atoms_group[1:]:
-                dp_system += dpdata.LabeledSystem(atoms, fmt='ase/structure')
+            dp_system = None
+            atoms_group = list(atoms_group)
+            for _, atoms in atoms_group:
+                if dp_system is None:
+                    dp_system = dpdata.LabeledSystem(atoms, fmt='ase/structure')
+                else:
+                    dp_system += dpdata.LabeledSystem(atoms, fmt='ase/structure')
+            if dp_system is None:
+                continue  # skip empty dataset
             dp_system.to_deepmd_npy(output_dir, set_size=len(dp_system))  # type: ignore
-            # TODO: return ArtifactDict
-            output_dirs.append(output_dir)
+            # inherit attrs key from input artifact
+            output_dirs.append({'url': output_dir, 'attrs': atoms_group[0][0]['attrs']})  # type: ignore
+
         return output_dirs
 
-    return covert_to_deepmd_npy
-convert_to_deepmd_npy = __convert_to_deepmd_npy()
-
-
-def __convert_to_lammps_input_data():
-    """workaround for cloudpickle issue"""
     def convert_to_lammps_input_data(poscar_files: List[ArtifactDict], base_dir: str, type_map: List[str]):
         import dpdata
         import os
@@ -122,5 +118,10 @@ def __convert_to_lammps_input_data():
             })
         return lammps_data_files
 
-    return convert_to_lammps_input_data
-convert_to_lammps_input_data = __convert_to_lammps_input_data()
+    return ase_atoms_to_cp2k_input_data, convert_to_deepmd_npy, convert_to_lammps_input_data
+
+(
+    ase_atoms_to_cp2k_input_data,
+    convert_to_deepmd_npy,
+    convert_to_lammps_input_data,
+) = __export_remote_functions()

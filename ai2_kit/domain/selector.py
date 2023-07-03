@@ -7,8 +7,9 @@ from pydantic import BaseModel
 from dataclasses import dataclass
 import pandas as pd
 
-from .data_helper import LammpsOutputHelper
-from .cll import ICllSelectorOutput, BaseCllContext
+from .data import LammpsOutputHelper
+from .iface import ICllSelectorOutput, BaseCllContext
+from .constant import LAMMPS_DUMPS_CLASSIFIED
 
 logger = get_logger(__name__)
 
@@ -20,7 +21,6 @@ class ThresholdSelectorInputConfig(BaseModel):
 @dataclass
 class ThresholdSelectorContext(BaseCllContext):
     ...
-
 
 @dataclass
 class ThresholdSelectorOutput(ICllSelectorOutput):
@@ -75,10 +75,14 @@ async def threshold_selector(input: ThresholdSelectorInput, ctx: ThresholdSelect
 
         logger.info('result: total: %d, passed: %d, selected: %d, rejected: %d', len(df), len(passed_df), len(selected_df), len(rejected_df))
 
-        candidate.attrs['all'] = df.step.tolist()
-        candidate.attrs['passed']   = passed_df.step.tolist()
-        candidate.attrs['selected'] = selected_df.step.tolist()
-        candidate.attrs['rejected'] = rejected_df.step.tolist()
+        classified_result = {
+            'all': df.step.tolist(),
+            'passed': passed_df.step.tolist(),
+            'selected': selected_df.step.tolist(),
+            'rejected': rejected_df.step.tolist(),
+        }
+
+        candidate.attrs[LAMMPS_DUMPS_CLASSIFIED] = classified_result
 
         total_count += len(df)
         passed_count += len(passed_df)
