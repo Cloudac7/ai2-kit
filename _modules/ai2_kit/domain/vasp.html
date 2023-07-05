@@ -386,7 +386,7 @@ document.write(`
     <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span>
     <span class="n">input_template</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
     <span class="n">potcar_source</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span>
-    <span class="n">kpoints_template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">kpoints_template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Input template for VASP. Could be a dict or content of a VASP input file.</span>
 
@@ -437,9 +437,6 @@ document.write(`
     <span class="c1"># prepare input template</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">input_template</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">input_template</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">input_template</span>
-        <span class="k">if</span> <span class="n">input_template</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">):</span>
-            <span class="n">input_template</span> <span class="o">=</span> \
-                <span class="n">ctx</span><span class="o">.</span><span class="n">resource_manager</span><span class="o">.</span><span class="n">resolve_artifact</span><span class="p">(</span><span class="n">input_template</span><span class="p">[</span><span class="mi">1</span><span class="p">:])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">url</span>
         <span class="n">input_template</span> <span class="o">=</span> <span class="n">Incar</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">input_template</span><span class="p">)</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">input_template</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">input_template</span><span class="p">)</span>
@@ -447,7 +444,7 @@ document.write(`
     <span class="c1"># prepare potcar</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">potcar_source</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="n">potcar_source</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">potcar_source</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">potcar_source</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="c1"># default: use same sequence as type_map</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">potcar_source</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">type_map</span><span class="p">):</span>
             <span class="n">potcar_source</span> <span class="o">=</span> <span class="p">{</span>
@@ -455,20 +452,16 @@ document.write(`
             <span class="p">}</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;potcar_source should not be shorter than type_map&#39;</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">potcar_source</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">):</span>
-            <span class="n">potcar_source</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> \
-                <span class="n">ctx</span><span class="o">.</span><span class="n">resource_manager</span><span class="o">.</span><span class="n">resolve_artifact</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">url</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># TODO: support generate POTCAR from given path of potential.</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;potcar_source should be either dict or list&#39;</span><span class="p">)</span>
 
     <span class="c1"># prepare kpoints</span>
     <span class="n">kpoints_template</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">kpoints_template</span>
-    <span class="k">if</span> <span class="n">kpoints_template</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">kpoints_template</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;resolve artifact </span><span class="si">{</span><span class="n">kpoints_template</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">kpoints_template</span> <span class="o">=</span> \
-                <span class="n">ctx</span><span class="o">.</span><span class="n">resource_manager</span><span class="o">.</span><span class="n">resolve_artifact</span><span class="p">(</span><span class="n">kpoints_template</span><span class="p">[</span><span class="mi">1</span><span class="p">:])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">url</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kpoints_template</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">kpoints_template</span> <span class="o">=</span> <span class="n">Kpoints</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">kpoints_template</span><span class="p">)</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kpoints_template</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">kpoints_template</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">kpoints_template</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">kpoints_template</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -514,14 +507,14 @@ document.write(`
             <span class="n">checkpoint</span><span class="o">=</span><span class="s1">&#39;vasp&#39;</span><span class="p">,</span>
         <span class="p">))</span>
 
-    <span class="c1"># run tasks</span>
+    <span class="c1"># submit tasks and wait for completion</span>
     <span class="n">jobs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">steps_group</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">split_list</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span> <span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">concurrency</span><span class="p">)):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">steps_group</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="n">script</span> <span class="o">=</span> <span class="n">BashScript</span><span class="p">(</span>
             <span class="n">template</span><span class="o">=</span><span class="n">ctx</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">script_template</span><span class="p">,</span>
-            <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span>
+            <span class="n">steps</span><span class="o">=</span><span class="n">steps_group</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">job</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">script</span><span class="o">.</span><span class="n">render</span><span class="p">(),</span> <span class="n">cwd</span><span class="o">=</span><span class="n">tasks_dir</span><span class="p">,</span>
                               <span class="n">checkpoint_key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;submit-job/vasp/</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">tasks_dir</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -538,7 +531,7 @@ document.write(`
     <span class="k">return</span> <span class="n">GenericVaspOutput</span><span class="p">(</span><span class="n">vasp_outputs</span><span class="o">=</span><span class="n">vasp_outputs</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">__make_vasp_task_dirs</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">__export_remote_functions</span><span class="p">():</span>
     <span class="k">def</span> <span class="nf">make_vasp_task_dirs</span><span class="p">(</span><span class="n">lammps_dump_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ArtifactDict</span><span class="p">],</span>
                             <span class="n">xyz_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ArtifactDict</span><span class="p">],</span>
                             <span class="n">type_map</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
@@ -591,7 +584,7 @@ document.write(`
                 <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">_symbol_count_from_symbols</span><span class="p">(</span><span class="n">elements_all</span><span class="p">)</span>
             <span class="p">]</span>
             <span class="n">ase</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">task_dir</span><span class="p">,</span> <span class="s1">&#39;POSCAR&#39;</span><span class="p">),</span> <span class="n">atoms</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;vasp5&#39;</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">task_dir</span><span class="p">,</span> <span class="s1">&#39;POSCAR&#39;</span><span class="p">),</span> <span class="n">atoms</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;vasp&#39;</span>
             <span class="p">)</span>
 
             <span class="c1"># create POTCAR</span>
@@ -602,7 +595,7 @@ document.write(`
 
             <span class="c1"># create KPOINTS</span>
             <span class="n">kpoints_template</span> <span class="o">=</span> <span class="n">dict_nested_get</span><span class="p">(</span>
-                <span class="n">file</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;attrs&#39;</span><span class="p">,</span> <span class="s1">&#39;vasp&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoints_template&#39;</span><span class="p">]</span> <span class="c1"># type: ignore</span>
+                <span class="n">file</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;attrs&#39;</span><span class="p">,</span> <span class="s1">&#39;vasp&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoints_template&#39;</span><span class="p">],</span> <span class="kc">None</span> <span class="c1"># type: ignore</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">kpoints_template</span><span class="p">:</span>
                 <span class="n">kpoints</span> <span class="o">=</span> <span class="n">Kpoints</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">kpoints_template</span><span class="p">)</span>
@@ -618,7 +611,7 @@ document.write(`
         <span class="k">return</span> <span class="n">task_dirs</span>
 
     <span class="k">return</span> <span class="n">make_vasp_task_dirs</span>
-<span class="n">make_vasp_task_dirs</span> <span class="o">=</span> <span class="n">__make_vasp_task_dirs</span><span class="p">()</span>
+<span class="n">make_vasp_task_dirs</span> <span class="o">=</span> <span class="n">__export_remote_functions</span><span class="p">()</span>
 </pre></div>
 
                 </article>
