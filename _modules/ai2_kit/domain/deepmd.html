@@ -184,12 +184,14 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../_api/ai2_kit.dflow.html">ai2_kit.dflow package</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ai2_kit.domain.html">ai2_kit.domain package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ai2_kit.domain.asap.html">ai2_kit.domain.asap module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ai2_kit.domain.constant.html">ai2_kit.domain.constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ai2_kit.domain.cp2k.html">ai2_kit.domain.cp2k module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ai2_kit.domain.data.html">ai2_kit.domain.data module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ai2_kit.domain.deepmd.html">ai2_kit.domain.deepmd module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ai2_kit.domain.iface.html">ai2_kit.domain.iface module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ai2_kit.domain.lammps.html">ai2_kit.domain.lammps module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ai2_kit.domain.lasp.html">ai2_kit.domain.lasp module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ai2_kit.domain.selector.html">ai2_kit.domain.selector module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ai2_kit.domain.updater.html">ai2_kit.domain.updater module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ai2_kit.domain.util.html">ai2_kit.domain.util module</a></li>
@@ -375,7 +377,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">json</span>
 
 <span class="kn">from</span> <span class="nn">.iface</span> <span class="kn">import</span> <span class="n">ICllTrainOutput</span><span class="p">,</span> <span class="n">BaseCllContext</span>
-<span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">Cp2kOutputHelper</span><span class="p">,</span> <span class="n">VaspOutputHelper</span><span class="p">,</span> <span class="n">DeepmdNpyHelper</span><span class="p">,</span> <span class="n">convert_to_deepmd_npy</span>
+<span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">DataFormat</span><span class="p">,</span> <span class="n">get_data_format</span><span class="p">,</span> <span class="n">convert_to_deepmd_npy</span>
+
 <span class="kn">from</span> <span class="nn">.constant</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">DP_CHECKPOINT_FILE</span><span class="p">,</span>
     <span class="n">DP_DISP_FILE</span><span class="p">,</span>
@@ -388,39 +391,39 @@ document.write(`
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="GenericDeepmdInputConfig"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.GenericDeepmdInputConfig">[docs]</a><span class="k">class</span> <span class="nc">GenericDeepmdInputConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<div class="viewcode-block" id="CllDeepmdInputConfig"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.CllDeepmdInputConfig">[docs]</a><span class="k">class</span> <span class="nc">CllDeepmdInputConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">model_num</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
     <span class="n">init_dataset</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">input_template</span><span class="p">:</span> <span class="nb">dict</span>
     <span class="n">compress_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="GenericDeepmdContextConfig"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.GenericDeepmdContextConfig">[docs]</a><span class="k">class</span> <span class="nc">GenericDeepmdContextConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<div class="viewcode-block" id="CllDeepmdContextConfig"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.CllDeepmdContextConfig">[docs]</a><span class="k">class</span> <span class="nc">CllDeepmdContextConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">script_template</span><span class="p">:</span> <span class="n">BashTemplate</span>
     <span class="n">dp_cmd</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;dp&#39;</span></div>
 
 
-<div class="viewcode-block" id="GenericDeepmdInput"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.GenericDeepmdInput">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">GenericDeepmdInput</span><span class="p">:</span>
-    <span class="n">config</span><span class="p">:</span> <span class="n">GenericDeepmdInputConfig</span>
+<div class="viewcode-block" id="CllDeepmdInput"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.CllDeepmdInput">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">CllDeepmdInput</span><span class="p">:</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">CllDeepmdInputConfig</span>
     <span class="n">type_map</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">old_dataset</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]</span>  <span class="c1"># training data used by previous iteration</span>
     <span class="n">new_dataset</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]</span>  <span class="c1"># training data used by current iteration</span>
     <span class="n">initiated</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># FIXME: this seems to be a bad design idea</span>
 
-<div class="viewcode-block" id="GenericDeepmdInput.update_training_dataset"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.GenericDeepmdInput.update_training_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">update_training_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]):</span>
+<div class="viewcode-block" id="CllDeepmdInput.update_training_dataset"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.CllDeepmdInput.update_training_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">update_training_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">old_dataset</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_dataset</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_dataset</span> <span class="o">=</span> <span class="n">dataset</span></div></div>
 
 
-<div class="viewcode-block" id="GenericDeepmdContext"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.GenericDeepmdContext">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">GenericDeepmdContext</span><span class="p">(</span><span class="n">BaseCllContext</span><span class="p">):</span>
-    <span class="n">config</span><span class="p">:</span> <span class="n">GenericDeepmdContextConfig</span></div>
+<div class="viewcode-block" id="CllDeepmdContext"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.CllDeepmdContext">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">CllDeepmdContext</span><span class="p">(</span><span class="n">BaseCllContext</span><span class="p">):</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">CllDeepmdContextConfig</span></div>
 
 
 <div class="viewcode-block" id="GenericDeepmdOutput"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.GenericDeepmdOutput">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">GenericDeepmdOutput</span><span class="p">(</span><span class="n">ICllTrainOutput</span><span class="p">):</span>
     <span class="n">outputs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]</span>
-    <span class="nb">input</span><span class="p">:</span> <span class="n">GenericDeepmdInput</span>
+    <span class="nb">input</span><span class="p">:</span> <span class="n">CllDeepmdInput</span>
 
 <div class="viewcode-block" id="GenericDeepmdOutput.get_mlp_models"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.GenericDeepmdOutput.get_mlp_models">[docs]</a>    <span class="k">def</span> <span class="nf">get_mlp_models</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DP_FROZEN_MODEL</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">]</span></div>
@@ -429,7 +432,7 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">new_dataset</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">old_dataset</span></div></div>
 
 
-<div class="viewcode-block" id="generic_deepmd"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.generic_deepmd">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">generic_deepmd</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="n">GenericDeepmdInput</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">GenericDeepmdContext</span><span class="p">):</span>
+<div class="viewcode-block" id="cll_deepmd"><a class="viewcode-back" href="../../../_api/ai2_kit.domain.deepmd.html#ai2_kit.domain.deepmd.cll_deepmd">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">cll_deepmd</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="n">CllDeepmdInput</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">CllDeepmdContext</span><span class="p">):</span>
     <span class="n">executor</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">resource_manager</span><span class="o">.</span><span class="n">default_executor</span>
 
     <span class="c1"># setup workspace</span>
@@ -443,35 +446,29 @@ document.write(`
             <span class="nb">input</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">init_dataset</span><span class="p">)</span>
 
     <span class="c1"># convert data type if necessary, only needed for new data as old data is already converted</span>
-    <span class="n">new_deepmd_npy_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">cp2k_output_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">vasp_output_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">deepmd_npy_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">data_to_be_converted</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># TODO: refactor data type conversion</span>
     <span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="nb">input</span><span class="o">.</span><span class="n">new_dataset</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">artifact</span><span class="o">.</span><span class="n">format</span> <span class="ow">or</span> <span class="n">DeepmdNpyHelper</span><span class="o">.</span><span class="n">is_match</span><span class="p">(</span><span class="n">artifact</span><span class="p">):</span>
-            <span class="c1"># treated as deepmd npy data if format is not specified</span>
-            <span class="n">new_deepmd_npy_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">Cp2kOutputHelper</span><span class="o">.</span><span class="n">is_match</span><span class="p">(</span><span class="n">artifact</span><span class="p">):</span>
-            <span class="n">cp2k_output_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">VaspOutputHelper</span><span class="o">.</span><span class="n">is_match</span><span class="p">(</span><span class="n">artifact</span><span class="p">):</span>
-            <span class="n">vasp_output_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">artifact</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="n">get_data_format</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">if</span> <span class="nb">format</span> <span class="o">==</span> <span class="n">DataFormat</span><span class="o">.</span><span class="n">DEEPMD_NPY</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">format</span><span class="p">:</span>
+            <span class="n">deepmd_npy_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;unsupported data type: </span><span class="si">{</span><span class="n">artifact</span><span class="o">.</span><span class="n">format</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">data_to_be_converted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
 
     <span class="c1"># convert data to deepmd/npy format</span>
-    <span class="c1"># TODO: support more data type</span>
     <span class="n">converted_data_dirs</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">run_python_fn</span><span class="p">(</span><span class="n">convert_to_deepmd_npy</span><span class="p">)(</span>
-        <span class="n">cp2k_outputs</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">cp2k_output_data</span><span class="p">],</span>
-        <span class="n">vasp_outputs</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">vasp_output_data</span><span class="p">],</span>
+        <span class="n">dataset</span><span class="o">=</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">data_to_be_converted</span><span class="p">],</span>
         <span class="n">base_dir</span><span class="o">=</span><span class="n">converted_data_dir</span><span class="p">,</span>
         <span class="n">type_map</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">type_map</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">new_deepmd_npy_data</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Artifact</span><span class="o">.</span><span class="n">of</span><span class="p">(</span>
-        <span class="n">url</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="n">DeepmdNpyHelper</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;attrs&#39;</span><span class="p">]</span>
+
+    <span class="n">deepmd_npy_data</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Artifact</span><span class="o">.</span><span class="n">of</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">],</span> <span class="n">attrs</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;attrs&#39;</span><span class="p">]</span>
     <span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">converted_data_dirs</span><span class="p">]</span>
 
-    <span class="nb">input</span><span class="o">.</span><span class="n">new_dataset</span> <span class="o">=</span> <span class="n">new_deepmd_npy_data</span>
+    <span class="nb">input</span><span class="o">.</span><span class="n">new_dataset</span> <span class="o">=</span> <span class="n">deepmd_npy_data</span>
 
     <span class="n">jobs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">JobFuture</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">output_dirs</span> <span class="o">=</span> <span class="p">[]</span>
@@ -531,12 +528,15 @@ document.write(`
         <span class="p">}</span>
         <span class="n">training</span><span class="p">[</span><span class="s1">&#39;training_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">training_data</span>
 
-        <span class="n">validation_data</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;systems&#39;</span><span class="p">:</span> <span class="n">validation_systems</span><span class="p">,</span>
-            <span class="s1">&#39;set_prefix&#39;</span><span class="p">:</span> <span class="n">training</span><span class="p">[</span><span class="s1">&#39;set_prefix&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="n">training</span><span class="p">[</span><span class="s1">&#39;batch_size&#39;</span><span class="p">],</span>
-        <span class="p">}</span>
-        <span class="n">training</span><span class="p">[</span><span class="s1">&#39;validation_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">validation_data</span>
+        <span class="c1"># ignore validation section if no data is provided, or else dp will throw error</span>
+        <span class="c1"># OSError: [Errno cannot find valid a data system] Please check your setting for data systems</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validation_systems</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">validation_data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;systems&#39;</span><span class="p">:</span> <span class="n">validation_systems</span><span class="p">,</span>
+                <span class="s1">&#39;set_prefix&#39;</span><span class="p">:</span> <span class="n">training</span><span class="p">[</span><span class="s1">&#39;set_prefix&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="n">training</span><span class="p">[</span><span class="s1">&#39;batch_size&#39;</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="n">training</span><span class="p">[</span><span class="s1">&#39;validation_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">validation_data</span>
 
         <span class="c1"># other params</span>
         <span class="n">dp_input</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;type_map&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">type_map</span>
@@ -571,7 +571,7 @@ document.write(`
         <span class="n">output_dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task_dir</span><span class="p">)</span>
 
         <span class="c1"># submit job</span>
-        <span class="n">job</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">dp_train_script</span><span class="o">.</span><span class="n">render</span><span class="p">(),</span> <span class="n">cwd</span><span class="o">=</span><span class="n">task_dir</span><span class="p">,</span> <span class="n">checkpoint_key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;submit-job/dp-train/</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">task_dir</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">dp_train_script</span><span class="o">.</span><span class="n">render</span><span class="p">(),</span> <span class="n">cwd</span><span class="o">=</span><span class="n">task_dir</span><span class="p">,</span> <span class="n">checkpoint_key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;queue-job:dp-train:</span><span class="si">{</span><span class="n">task_dir</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">jobs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
 
     <span class="k">await</span> <span class="n">gather_jobs</span><span class="p">(</span><span class="n">jobs</span><span class="p">,</span> <span class="n">max_tries</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -580,6 +580,7 @@ document.write(`
         <span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">,</span>
         <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">Artifact</span><span class="o">.</span><span class="n">of</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">DataFormat</span><span class="o">.</span><span class="n">DEEPMD_OUTPUT_DIR</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">output_dirs</span><span class="p">]</span>
     <span class="p">)</span></div>
 
