@@ -24,6 +24,7 @@ jobs:
     
     - name: Install dependencies
       run: |
+        rm -f poetry.lock
         poetry install
     
     - name: Sphinx APIDoc
