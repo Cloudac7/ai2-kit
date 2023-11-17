@@ -19,14 +19,20 @@ CLL 工作流的主要改进包括:
 * Label：CP2K, VASP
 * Train：DeepMD
 * Explore：LAMMPS, LASP
-* Select: Model deviation, ASAP (TODO)
+* Select: Model deviation, Distinctive structure selection
 
-当前 CLL 工作流通过 `ai2-kit` 自带的HPC执行器进行作业提交，支持在单一HPC集群完成计算，未来根据需要考虑支持多集群调度，以及支持包括 `dflow` 在内的不同工作流引擎。
+当前 CLL 工作流通过 `ai2-kit` 自带的HPC执行器进行作业提交，支持在单一HPC集群完成计算，未来根据需要考虑支持多集群调度，以及支持包括 `DFlow` 在内的不同工作流引擎。
 
 
 ## 环境要求
 * Workflow 运行环境与 HPC 运行环境的 Python 主版本需要保持一致，否则远程执行会出现问题。
 * HPC 的运行环境需要安装 `ai2-kit`, 通常来讲 HPC 上的 `ai2-kit` 与本地的 `ai2-kit` 版本不需要严格相同， 但如果差异过大仍有出现问题的可能，所以建议在条件允许时使用相同版本的 `ai2-kit`。
+
+## 安装
+
+```bash
+pip install -U ai2-kit
+```
 
 ## 使用说明
 
@@ -61,6 +67,8 @@ CLL 工作流的配置文件采用 YAML 格式，并且支持以任意维度进�
 * executor.yml: 用于配置 HPC 执行器的参数
 * workflow.yml: 用于配置工作流软件的参数
 
+另一种配置构建方法是使用[配置示例](../../example/config/cll-mlp-training/) 中提供的配置文件做为基准创建自己的工作流。具体可参考示例目录中的文档。
+
 我们首先从 `artifact.yml` 开始，这个配置文件用于配置工作流所需的数据。在这个例子中，我们需要配置三个数据集，分别是用于训练的数据集，用于验证的数据集，以及用于结构搜索的数据集。这三个数据集的配置如下：
 
 ```yaml
@@ -80,10 +88,10 @@ artifacts:
     url: !join [*base_dir, explore]
     includes: POSCAR*
     attrs:  # 如有需要可在这里针对特定体系指定特定的软件配置, 此例无需此配置，因此放空
-      lammps:
-        plumed_config_file:   
-      cp2k:
-        input_template_file:
+      # lammps:
+      #   plumed_config: !load_text plumed.in
+      # cp2k:
+      #   input_template: !load_text cp2k.inp
 ```
 
 这里我们使用 `ai2-kit` 提供的自定义 tag `!join` 来简化数据配置, 相关功能可查看 [TIPS](./tips.md) 文档。
@@ -279,6 +287,7 @@ workflow:
               &END
            &END
            &SUBSYS
+              @include coord_n_cell.inc
               &KIND O
                  BASIS_SET  DZVP-MOLOPT-SR-GTH
                  POTENTIAL  GTH-PBE-q6
@@ -298,22 +307,24 @@ workflow:
     lammps:
       timestep: 0.0005
       sample_freq: 100
-      tau_t: 0.1
-      tau_p: 0.5
       nsteps: 2000
       ensemble: nvt
 
-      post_init_section: |
+      template_vars:
+        POST_INIT: |
           neighbor 1.0 bin
           box      tilt large
 
-      post_read_data_section: |
+        POST_READ_DATA: |
           change_box all triclinic
 
       system_files: [ h2o-64-explore ]
+
       explore_vars:
-          temp: [ 330, 440]
-          pres: [1]
+        TEMP: [ 330, 430, 530]
+        PRES: [1]
+        TAU_T: 0.1  # Optional
+        TAU_P: 0.5  # Optional
 
   select:
     model_devi:
@@ -350,3 +361,8 @@ ai2-kit workflow cll-mlp-training *.yml --executor hpc-cluster01 --path-prefix h
 * `--executor hpc-cluster01` 用于指定要使用的 HPC 执行器，此处使用了上一节中配置的 `hpc-cluster01` 执行器;
 * `--path-prefix h2o_64-run-01` 指定远程工作目录，它会在 `work_dir` 下创建一个 `h2o_64-run-01` 的目录用于存放工作流的执行结果; 
 * `--checkpoint run-01.cpkt` 会在本地生成一个checkpoint文件，用于保存工作流的执行状态，以便在执行中断后恢复执行。
+
+## 引用
+如果您使用了本工作流中的LASP，请引用以下文章： 
+> Yu-Xin Guo, Yong-Bin Zhuang, Jueli Shi, Jun Cheng; ChecMatE: A workflow package to automatically generate machine learning potentials and phase diagrams for semiconductor alloys. J. Chem. Phys. 7 September 2023; 159 (9): 094801. https://doi.org/10.1063/5.0166858
+> Huang, S., Shang, C., Kang, P., Zhang, X. & Liu, Z. LASP: Fast global potential energy surface exploration. Wiley Interdiscip Rev Comput Mol Sci 9, (2019). https://doi.org/10.1002/wcms.1415

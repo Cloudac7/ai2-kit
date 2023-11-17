@@ -8,6 +8,9 @@ Submodules
    :maxdepth: 4
 
    ai2_kit.tool.ase
+   ai2_kit.tool.deepmd
+   ai2_kit.tool.dpdata
+   ai2_kit.tool.yaml
 
 Module contents
 ---------------
