@@ -1,6 +1,7 @@
 # ai<sup>2</sup>-kit
 
 [![PyPI version](https://badge.fury.io/py/ai2-kit.svg)](https://badge.fury.io/py/ai2-kit)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/ai2-kit)](https://pypi.org/project/ai2-kit/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ai2-kit)](https://pypi.org/project/ai2-kit/)
 
 A toolkit featured _**a**rtificial **i**ntelligence × **a**b **i**nitio_ for computational chemistry research.
@@ -31,19 +32,31 @@ poetry install
 
 ./ai2-kit --help
 ```
-Note that instead of running global `ai2-kit` command, you should run `./ai2-kit` to run the command from source.
+Note that instead of running global `ai2-kit` command, you should run `./ai2-kit` to run the command from source on Linux/MacOS or `.\ai2-kit.ps1` on Windows.
 
 ## Manuals
+### Featuring Tools
+* [ai2-cat](doc/manual/ai2cat.md): A toolkit for dynamic catalysis researching.
+
+### Workflows
+* [CLL MLP Training Workflow](doc/manual/cll-workflow.md) ([zh](doc/manual/cll-workflow.zh.md))
 
 ### Domain Specific Tools
 * [Proton Transfer Analysis Toolkit](doc/manual/proton-transfer.md)
-* [CLL MLP Training Workflow](doc/manual/cll-workflow.md)
-* [FEP MLP Training Workflow](doc/manual/fep-workflow.md)
+* [Amorphous Oxides Structure Analysis Toolkit](doc/manual/aos-analysis.md)
 
-### Build-in Functionalities
+### General Tools
+* [Tips](doc/manual/tips.md): useful tips for using `ai2-kit`
+* [Batch Toolkit](doc/manual/batch.md): a toolkit to generate batch scripts from files or directories
+* [ASE Toolkit](doc/manual/ase.md): commands to process trajectory files with [ASE](https://wiki.fysik.dtu.dk/ase/)
+* [dpdata Toolkit](doc/manual/dpdata.md): commands to process system data with [dpdata](https://github.com/deepmodeling/dpdata/)
+
+### Notebooks
+* [ai2cat](notebook/ai2cat.ipynb)
+
+### Miscellaneous
+* [HPC Executor Introduction](doc/manual//hpc-executor.md) ([zh](doc/manual/hpc-executor.zh.md)): a simple HPC executor for job submission and management
 * [Checkpoint Mechanism](doc/manual/checkpoint.md)
-* [ASE Toolkit](doc/manual/ase.md)
-* [Tips](doc/manual/tips.md)
 
 
 ## Acknowledgement

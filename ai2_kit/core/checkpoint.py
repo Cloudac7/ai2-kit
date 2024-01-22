@@ -4,6 +4,7 @@ import functools
 import cloudpickle
 import os
 import inspect
+import fnmatch
 
 from .log import get_logger
 from .util import to_awaitable
@@ -158,31 +159,37 @@ def del_checkpoint(key: str):
 
 class CheckpointCmd:
     """checkpoint command line interface"""
-    def __init__(self) -> None:
-        ...
-
     def load(self, file):
         set_checkpoint_file(file)
         return self
 
-    def ls(self):
+    def ls(self, verbose=False):
         '''list all the checkpoint entries in the checkpoint file'''
         assert _checkpoint_data is not None
         for i, (key, value) in enumerate(_checkpoint_data.items()):
-            print('\n'.join([
-                '=' * 80,
-                f'Key:        \t{key}',
-                f'Call Site:  \t{value["info"]["call_site"]}',
-                f'Function:   \t{value["info"]["fn_name"]}',
-            ]))
-        print('=' * 80)
+            if verbose:
+                print('\n'.join([
+                    '=' * 80,
+                    f'Key:        \t{key}',
+                    f'Call Site:  \t{value["info"]["call_site"]}',
+                    f'Function:   \t{value["info"]["fn_name"]}',
+                ]))
+            else:
+                print(key)
 
-    def rm(self, prefix: str):
-        """remove checkpoint entries with the given prefix"""
+    def rm(self, glob_pattern: str, yes=False, exclude: Optional[str]=None):
+        """remove checkpoint entries with the given pattern"""
         assert _checkpoint_data is not None
 
-        for key in list(_checkpoint_data.keys()):
-            if key.startswith(prefix):
-                logger.info(f"Remove checkpoint: {key}")
-                del _checkpoint_data[key]
+        keys = [ key for key in _checkpoint_data.keys() if fnmatch.fnmatch(key, glob_pattern) ]
+        if exclude is not None:
+            keys = [ key for key in keys if not fnmatch.fnmatch(key, exclude) ]
+
+        for key in keys:
+            if not yes:
+                print(f"Delete checkpoint {key}? [y/n]")
+                if input().lower() != 'y':
+                    continue
+            del _checkpoint_data[key]
+            print(f"Delete checkpoint {key}")
         _dump_checkpoint()

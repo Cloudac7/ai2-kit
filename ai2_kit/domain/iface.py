@@ -3,8 +3,11 @@
 from abc import abstractmethod, ABC
 from ai2_kit.core.artifact import Artifact, ArtifactMap
 from ai2_kit.core.resource_manager import ResourceManager
-from typing import List
+from typing import List, Literal
 from dataclasses import dataclass
+
+
+TRAINING_MODE = Literal['default', 'dpff', 'fep-redox', 'fep-pka']
 
 
 @dataclass
@@ -35,6 +38,10 @@ class ICllExploreOutput(ABC):
 class ICllSelectorOutput(ABC):
     @abstractmethod
     def get_model_devi_dataset(self) -> List[Artifact]:
+        ...
+
+    @abstractmethod
+    def get_new_explore_systems(self) -> List[Artifact]:
         ...
 
     @abstractmethod

@@ -1,54 +1,72 @@
 from ai2_kit.core.artifact import Artifact, ArtifactDict
 from ai2_kit.core.script import BashScript, BashStep, BashTemplate
 from ai2_kit.core.job import gather_jobs
-from ai2_kit.core.util import merge_dict, dict_nested_get, split_list
+from ai2_kit.core.util import dict_nested_get, list_split, list_sample, dump_json, dump_text
 from ai2_kit.core.log import get_logger
+from ai2_kit.core.pydantic import BaseModel
 
-from typing import List, Union, Tuple
-from pydantic import BaseModel
+from typing import List, Tuple, Literal, Optional, Mapping, Any, Iterable
 from dataclasses import dataclass
+from ase import Atoms
 
+from string import Template
 import copy
 import os
-import io
 
-from .data import LammpsOutputHelper, XyzHelper, Cp2kOutputHelper, ase_atoms_to_cp2k_input_data
-from .iface import ICllLabelOutput, BaseCllContext
-from .util import loads_cp2k_input, load_cp2k_input, dump_cp2k_input
+from .data import DataFormat, ase_atoms_to_cp2k_input_data, artifacts_to_ase_atoms
+from .iface import ICllLabelOutput, BaseCllContext, TRAINING_MODE
+from .util import dump_cp2k_input
+
 
 logger = get_logger(__name__)
 
-class GenericCp2kInputConfig(BaseModel):
+
+class CllCp2kInputConfig(BaseModel):
     init_system_files: List[str] = []
-    limit: int = 50
-    input_template: Union[dict, str]
+    wfn_warmup_template: Optional[str] = None
+    """
+    Warmup template for cp2k. Could be a dict or content of a cp2k input file.
+    This template will be used to generate input files for warmup runs.
+    The warmup runs can be used to generate wave function files for the main runs.
+    """
+    input_template: Optional[str] = None
     """
     Input template for cp2k. Could be a dict or content of a cp2k input file.
-
-    Note:
-    If you are using files in input templates, it is recommended to use artifact name instead of literal path.
-    String starts with '@' will be treated as artifact name.
-    For examples, FORCE_EVAL/DFT/BASIS_SET_FILE_NAME = @cp2k/basic_set.
-    You can still use literal path, but it is not recommended.
     """
 
-class GenericCp2kContextConfig(BaseModel):
+    template_vars: Mapping[str, Any] = dict()
+    """
+    Template variables for input_template and wfn_warmup_template.
+
+    Those vars can be referenced in the LAMMPS input template as $$VAR_NAME.
+    """
+
+    limit: int = 50
+    """
+    Limit of the number of systems to be labeled.
+    """
+    limit_method: Literal["even", "random", "truncate"] = "even"
+
+
+class CllCp2kContextConfig(BaseModel):
     script_template: BashTemplate
     cp2k_cmd: str = 'cp2k'
+    post_cp2k_cmd: str = 'echo "no post_cp2k_cmd"'
     concurrency: int = 5
 
 
 @dataclass
-class GenericCp2kInput:
-    config: GenericCp2kInputConfig
+class CllCp2kInput:
+    config: CllCp2kInputConfig
+    mode: TRAINING_MODE
     system_files: List[Artifact]
     type_map: List[str]
     initiated: bool = False  # FIXME: this seems to be a bad design idea
 
 
 @dataclass
-class GenericCp2kContext(BaseCllContext):
-    config: GenericCp2kContextConfig
+class CllCp2kContext(BaseCllContext):
+    config: CllCp2kContextConfig
 
 
 @dataclass
@@ -59,81 +77,66 @@ class GenericCp2kOutput(ICllLabelOutput):
         return self.cp2k_outputs
 
 
-async def generic_cp2k(input: GenericCp2kInput, ctx: GenericCp2kContext) -> GenericCp2kOutput:
+async def cll_cp2k(input: CllCp2kInput, ctx: CllCp2kContext) -> GenericCp2kOutput:
     executor = ctx.resource_manager.default_executor
 
     # For the first round
     # FIXME: move out from this function, this should be done in the workflow
     if not input.initiated:
-        input.system_files += ctx.resource_manager.get_artifacts(input.config.init_system_files)
+        input.system_files += ctx.resource_manager.resolve_artifacts(input.config.init_system_files)
+
+    if len(input.system_files) == 0:
+        return GenericCp2kOutput(cp2k_outputs=[])
 
     # setup workspace
     work_dir = os.path.join(executor.work_dir, ctx.path_prefix)
     [tasks_dir] = executor.setup_workspace(work_dir, ['tasks'])
 
-    # prepare input template
-    if isinstance(input.config.input_template, str):
-        input_template = loads_cp2k_input(input.config.input_template)
-    else:
-        input_template = copy.deepcopy(input.config.input_template)
-
-    # resolve data files
-    lammps_dump_files: List[Artifact] = []
-    xyz_files: List[Artifact] = []
-
-    # TODO: support POSCAR in the future
-    # TODO: refactor the way of handling different file formats
-    system_files = ctx.resource_manager.resolve_artifacts(input.system_files)
-    for system_file in system_files:
-        if LammpsOutputHelper.is_match(system_file):
-            lammps_out = LammpsOutputHelper(system_file)
-            lammps_dump_files.extend(lammps_out.get_selected_dumps())
-        elif XyzHelper.is_match(system_file):
-            xyz_files.append(system_file)
-        else:
-            raise ValueError(f'unsupported format {system_file.url}: {system_file.format}')
-
     # create task dirs and prepare input files
-    cp2k_task_dirs = []
-    if lammps_dump_files or xyz_files:
-        cp2k_task_dirs = executor.run_python_fn(make_cp2k_task_dirs)(
-            lammps_dump_files=[a.to_dict() for a in lammps_dump_files],
-            xyz_files=[a.to_dict() for a in xyz_files],
-            type_map=input.type_map,
-            base_dir=tasks_dir,
-            input_template=input_template,
-            limit= 0 if input.initiated else input.config.limit,  # initialize all data if not initiated
-        )
-    else:
-        logger.warn('no available candidates, skip')
-        return GenericCp2kOutput(cp2k_outputs=[])
+    cp2k_task_dirs = executor.run_python_fn(make_cp2k_task_dirs)(
+        system_files=[a.to_dict() for a in input.system_files],
+        type_map=input.type_map,
+        base_dir=tasks_dir,
+        mode=input.mode,
+        input_template=input.config.input_template,
+        template_vars=input.config.template_vars,
+        # initialize all data if not initiated
+        limit=0 if not input.initiated else input.config.limit,
+        limit_method=input.config.limit_method,
+        wfn_warmup_template=input.config.wfn_warmup_template,
+    )
 
     # build commands
     steps = []
     for cp2k_task_dir in cp2k_task_dirs:
+        # run warmup if needed
+        # note: use if-else instead of boolean shortcut to avoid wrong status
+        cmd = '\n'.join([
+            f'if [ -f wfn_warmup.inp ]; then {ctx.config.cp2k_cmd} -i wfn_warmup.inp &> wfn_warmup.out; fi && \\',
+            f'{ctx.config.cp2k_cmd} -i input.inp &> output && {ctx.config.post_cp2k_cmd}',
+        ])
         steps.append(BashStep(
             cwd=cp2k_task_dir['url'],
-            cmd=[ctx.config.cp2k_cmd, '-i input.inp 1>> output 2>> output'],
+            cmd=cmd,
             checkpoint='cp2k',
         ))
 
     # submit tasks and wait for completion
     jobs = []
-    for i, steps_group in enumerate(split_list(steps, ctx.config.concurrency)):
+    for i, steps_group in enumerate(list_split(steps, ctx.config.concurrency)):
         if not steps_group:
             continue
         script = BashScript(
             template=ctx.config.script_template,
             steps=steps_group,
         )
-        job = executor.submit(script.render(), cwd=tasks_dir,
-                              checkpoint_key=f'submit-job/cp2k/{i}:{tasks_dir}')
+        job = executor.submit(script.render(), cwd=tasks_dir)
         jobs.append(job)
     jobs = await gather_jobs(jobs, max_tries=2)
 
     cp2k_outputs = [Artifact.of(
         url=a['url'],
-        format=Cp2kOutputHelper.format,
+        format=DataFormat.CP2K_OUTPUT_DIR,
         executor=executor.name,
         attrs=a['attrs'],
     ) for a in cp2k_task_dirs]
@@ -143,74 +146,110 @@ async def generic_cp2k(input: GenericCp2kInput, ctx: GenericCp2kContext) -> Gene
 
 def __export_remote_functions():
 
-    def make_cp2k_task_dirs(lammps_dump_files: List[ArtifactDict],
-                            xyz_files: List[ArtifactDict],
+    class Cp2kInputTemplate(Template):
+        delimiter = '$$'
+
+
+    def make_cp2k_task_dirs(system_files: List[ArtifactDict],
                             type_map: List[str],
-                            input_template: dict,
+                            input_template: Optional[str],
+                            template_vars: Mapping[str, Any],
                             base_dir: str,
+                            mode: TRAINING_MODE,
                             limit: int = 0,
+                            wfn_warmup_template: Optional[str] = None,
+                            limit_method: Literal["even", "random", "truncate"] = "even",
                             input_file_name: str = 'input.inp',
+                            warmup_file_name: str = 'wfn_warmup.inp'
                             ) -> List[ArtifactDict]:
         """Generate CP2K input files from LAMMPS dump files or XYZ files."""
-        import ase.io
-        from ase import Atoms
-
         task_dirs = []
-        atoms_list: List[Tuple[ArtifactDict, Atoms]] = []
-
-        # read atoms
-        for dump_file in lammps_dump_files:
-            atoms_list += [
-                (dump_file, atoms)
-                for atoms in ase.io.read(dump_file['url'], ':', format='lammps-dump-text', order=False, specorder=type_map)
-            ]  # type: ignore
-        for xyz_file in xyz_files:
-            atoms_list += [
-                (xyz_file, atoms)
-                for atoms in ase.io.read(xyz_file['url'], ':', format='extxyz')
-            ]  # type: ignore
+        atoms_list: List[Tuple[ArtifactDict, Atoms]] = artifacts_to_ase_atoms(system_files, type_map=type_map)
 
         if limit > 0:
-            atoms_list = atoms_list[:limit]
+            atoms_list = list_sample(atoms_list, limit, method=limit_method)
 
-        for i, (file, atoms) in enumerate(atoms_list):
+        for i, (data_file, atoms) in enumerate(atoms_list):
             # create task dir
             task_dir = os.path.join(base_dir, f'{str(i).zfill(6)}')
             os.makedirs(task_dir, exist_ok=True)
+            dump_json(data_file, os.path.join(task_dir, 'debug.data-file.json'))
 
-            # TODO: should also support input_template
-            # find input template in data_file attrs, if not found, use input_template as default
-            input_data_file = dict_nested_get(file, ['attrs', 'cp2k', 'input_template_file'],  None)  # type: ignore
-            if isinstance(input_data_file, str):
-                with open(input_data_file, 'r') as f:
-                    input_data = load_cp2k_input(f)
-            else:
-                input_data = copy.deepcopy(input_template)
+            # load system-wise config from attrs
+            overridable_params: dict = copy.deepcopy(dict_nested_get(data_file, ['attrs', 'cp2k'], dict()))  # type: ignore
 
-            coords, cell = ase_atoms_to_cp2k_input_data(atoms)
-            merge_dict(input_data, {
-                'FORCE_EVAL': {
-                    'SUBSYS': {
-                        # FIXME: this is a dirty hack, we should make dump_cp2k_input support COORD
-                        'COORD': dict.fromkeys(coords, ''),
-                        'CELL': {
-                            'A': ' '.join(map(str, cell[0])),
-                            'B': ' '.join(map(str, cell[1])),
-                            'C': ' '.join(map(str, cell[2])),
-                        }
-                    }
-                }
-            })
-            with open(os.path.join(task_dir, input_file_name), 'w') as f:
-                dump_cp2k_input(input_data, f)
+            # create input template
+            warmup_input = overridable_params.get('wfn_warmup_template', wfn_warmup_template)
+            normal_input = overridable_params.get('input_template', input_template)
+
+            # be careful to override template_vars without changing the original dict
+            template_vars = {**template_vars, **overridable_params.get('template_vars', dict())}
+
+            # inject INTENSITY and POLARIZATION if efield is provided
+            efield = data_file['attrs'].get('efield')  # set by upstream task, lammps, for example
+            if mode == 'dpff':
+                assert efield is not None, 'efield is required for dpff mode'
+
+            if efield:
+                intensity, polarisation = lammps_efield_to_cp2k(efield)  # type: ignore
+                template_vars['INTENSITY'] = intensity
+                template_vars['POLARISATION'] = ' '.join(map(str, polarisation))
+
+            if warmup_input:
+                warmup_input = Cp2kInputTemplate(warmup_input).substitute(template_vars)
+                dump_text(warmup_input, os.path.join(task_dir, warmup_file_name))
+
+            assert normal_input, 'normal_input must be provided'
+            normal_input = Cp2kInputTemplate(normal_input).substitute(template_vars)
+            dump_text(normal_input, os.path.join(task_dir, input_file_name))
+
+            # create coord_n_cell.inp
+            with open(os.path.join(task_dir, 'coord_n_cell.inc'), 'w') as f:
+                dump_coord_n_cell(f, atoms)
 
             task_dirs.append({
                 'url': task_dir,
-                'attrs': file['attrs'],
+                'attrs': data_file['attrs'],
             })
-
         return task_dirs
 
-    return make_cp2k_task_dirs
+    def dump_coord_n_cell(fp, atoms: Atoms):
+        coords, cell = ase_atoms_to_cp2k_input_data(atoms)
+        dump_cp2k_input({
+            'COORD': dict.fromkeys(coords, ''),  # FIXME: this is a dirty hack, should make dump_cp2k_input support COORD
+            'CELL': {
+                'A': ' '.join(map(str, cell[0])),
+                'B': ' '.join(map(str, cell[1])),
+                'C': ' '.join(map(str, cell[2])),
+            }
+        }, fp)
 
-make_cp2k_task_dirs = __export_remote_functions()
+
+    def lammps_efield_to_cp2k(efield: Iterable[float]):
+        """
+        IN CP2K, the efield is defined as
+        INTENSITY and POLARIZATION (direction of the electric field)
+
+        :param efield: list of 3 floats, the electric field in lammps unit
+        :return: intensity, polarization
+        """
+        import numpy as np
+        from scipy import constants
+
+        efield = np.array(efield)
+        factor = constants.physical_constants["atomic unit of electric field"][0] * constants.angstrom
+        intensity = np.linalg.norm(efield)
+        polarization = efield / np.linalg.norm(efield)
+        return intensity / factor, polarization  # type: ignore
+
+
+    return (
+        make_cp2k_task_dirs,
+        dump_coord_n_cell,
+    )
+
+
+(
+    make_cp2k_task_dirs,
+    dump_coord_n_cell,
+) = __export_remote_functions()

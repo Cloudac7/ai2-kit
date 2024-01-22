@@ -1,15 +1,15 @@
-from .queue_system import QueueSystemConfig, BaseQueueSystem, Slurm, Lsf
+from .queue_system import QueueSystemConfig, BaseQueueSystem, Slurm, Lsf, PBS
 from .job import JobFuture
 from .artifact import Artifact
 from .connector import SshConfig, BaseConnector, SshConnector, LocalConnector
 from .util import s_uuid
 from .log import get_logger
+from .pydantic import BaseModel
 
 logger = get_logger(__name__)
 
 
-from pydantic import BaseModel
-from typing import Optional, Dict, List, TypeVar, Callable, Mapping
+from typing import Optional, Dict, List, TypeVar, Callable, Mapping, Union
 from abc import ABC, abstractmethod
 from invoke import Result
 import os
@@ -93,7 +93,9 @@ class Executor(ABC):
 class HpcExecutor(Executor):
 
     @classmethod
-    def from_config(cls, config: BaseExecutorConfig, name: str):
+    def from_config(cls, config: Union[dict, BaseExecutorConfig], name: str = ''):
+        if isinstance(config, dict):
+            config = BaseExecutorConfig.parse_obj(config)
         if config.ssh:
             connector = SshConnector.from_config(config.ssh)
         else:
@@ -105,6 +107,9 @@ class HpcExecutor(Executor):
         elif config.queue_system.lsf:
             queue_system = Lsf()
             queue_system.config = config.queue_system.lsf
+        elif config.queue_system.pbs:
+            queue_system = PBS()
+            queue_system.config = config.queue_system.pbs
         if queue_system is None:
             raise ValueError('Queue system config is missing!')
         queue_system.connector = connector
@@ -168,7 +173,7 @@ class HpcExecutor(Executor):
         def remote_fn(*args, **kwargs):
             script = fn_to_script(lambda: fn(*args, **kwargs), delimiter='@')
             ret = self.run_python_script(script=script, python_cmd=python_cmd, cwd=None)
-            _, r = ret.stdout.rsplit('@')
+            _, r = ret.stdout.rsplit('@', 1)
             return cloudpickle.loads(bz2.decompress(base64.b64decode(r)))
         return remote_fn  # type: ignore
 
@@ -226,6 +231,7 @@ def fn_to_script(fn: Callable, delimiter='@'):
     script = [
         f'''import base64,bz2,sys,cloudpickle as cp''',
         f'''r=cp.loads(bz2.decompress(base64.b64decode({repr(dumped_fn)})))()''',
+        f'''sys.stdout.flush()''',  # ensure all output is printed
         f'''print({repr(delimiter)}+base64.b64encode(bz2.compress(cp.dumps(r, protocol=cp.DEFAULT_PROTOCOL),5)).decode('ascii'))''',
         f'''sys.stdout.flush()''',  # ensure all output is printed
     ]

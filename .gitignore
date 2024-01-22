@@ -139,5 +139,10 @@ result*
 *.pickle
 
 # built docs
-doc/_build
-doc/_api
+jupyter-book/_build
+jupyter-book/_api
+
+*.ipynb
+# remove when it is ready
+tutorial/
+0*

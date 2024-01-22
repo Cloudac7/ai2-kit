@@ -1,7 +1,7 @@
-from pydantic import BaseModel
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Sequence
 import shlex
 
+from .pydantic import BaseModel
 
 def exit_on_error_statment(v='__EXITCODE__'):
     return f"{v}=$?; if [ ${v} -ne 0 ]; then exit ${v}; fi"
@@ -23,8 +23,8 @@ class BashTemplate(BaseModel):
 
 class BashStep(BaseModel):
     cmd: Union[str, List[str]]
-    cwd: Optional[str]
-    checkpoint: Optional[str]
+    cwd: Optional[str] = None
+    checkpoint: Optional[str] = None
     exit_on_error: bool = True
 
     def render(self):
@@ -45,7 +45,7 @@ class BashStep(BaseModel):
 
         if self.checkpoint:
             checkpoint = shlex.quote(self.checkpoint + '.checkpoint')
-            msg = shlex.quote(f"pass {checkpoint}")
+            msg = shlex.quote(f"hit {checkpoint}, skip")
 
             rendered_step = '\n'.join([
                 f'if [ -f {checkpoint} ]; then echo {msg}; else',
@@ -64,7 +64,7 @@ class BashStep(BaseModel):
         return rendered_step
 
 
-BashSteps = List[Union[str, BashStep]]
+BashSteps = Sequence[Union[str, BashStep]]
 
 
 class BashScript(BaseModel):
